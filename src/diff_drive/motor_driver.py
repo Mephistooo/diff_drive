@@ -35,7 +35,7 @@ class VelocityCommand():
         linear = min(1.0, max(-1.0, data.linear.x))
         angular = min(1.0, max(-1.0, data.angular.z))
 
-          left_temp = ((2 * linear) - (angular * self.WHEEL_GAP)) / (2 * self.WHEEL_RADIUS)
+        left_temp = ((2 * linear) - (angular * self.WHEEL_GAP)) / (2 * self.WHEEL_RADIUS)
         right_temp = ((2 * linear) + (angular * self.WHEEL_GAP)) / (2 * self.WHEEL_RADIUS)
         if data.linear.x != 0:
             left_temp = map((left_temp * 100), -3000, 3000, -1000, 1000)
