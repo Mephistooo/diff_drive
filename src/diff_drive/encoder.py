@@ -11,7 +11,7 @@ class Encoder:
         self.setRange(-32768, 32767)
         self.initCount(0)
         self.isReversed = False
-        self.gpio_encoder = encoder(pin_a, pin_b)
+        self.gpio_encoder = _encoder(pin_a, pin_b)
         self.ppr = 40000  # Pulses Per Revolution of the encoder
         self.tstop = 20  # Loop execution duration (s)
         self.tsample = 0.02  # Sampling period for code execution (s)
