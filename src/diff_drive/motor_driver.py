@@ -40,7 +40,7 @@ class VelocityCommand():
 
         left_temp = ((2 * linear) - (angular * WHEEL_GAP)) / (2 * WHEEL_RADIUS)
         right_temp = ((2 * linear) + (angular * WHEEL_GAP)) / (2 * WHEEL_RADIUS)
-       if data.linear.x != 0:
+        if data.linear.x != 0:
             left_temp = round((map((left_temp * 100), -3000, 3000, -1000, 1000) / 1000), 2) 
             self.motor_driver.motor1.throttle = left_temp
             self.motor_driver.motor3.throttle = left_temp
