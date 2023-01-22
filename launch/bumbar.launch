@@ -22,7 +22,7 @@
     </rosparam>
   </node>
 
-   <node name="motor_driver" pkg="diff_drive" type="diff_drive_odometry"
+   <node name="motor_driver" pkg="diff_drive" type="motor_driver.py"
         output="screen">
   </node>
 
