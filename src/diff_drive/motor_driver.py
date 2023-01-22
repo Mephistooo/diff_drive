@@ -42,8 +42,8 @@ class VelocityCommand():
         # left_temp = ((2 * linear) - (angular * self.WHEEL_GAP)) / (2 * self.WHEEL_RADIUS)
         # right_temp = ((2 * linear) + (angular * self.WHEEL_GAP)) / (2 * self.WHEEL_RADIUS)
         # #rotation 
-        linear = message.linear.x
-        angular = message.angular.z
+        linear = data.linear.x
+        angular = data.angular.z
         if linear == 0 :
             right_speed = angular * self.WHEEL_GAP / 2.0
             left_speed = -right_speed
