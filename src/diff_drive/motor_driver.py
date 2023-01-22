@@ -42,18 +42,18 @@ class VelocityCommand():
         left_temp = ((2 * linear) - (angular * self.WHEEL_GAP)) / (2 * self.WHEEL_RADIUS)
         right_temp = ((2 * linear) + (angular * self.WHEEL_GAP)) / (2 * self.WHEEL_RADIUS)
         if data.linear.x != 0:
-            left_temp = max(min(1.0, left_temp * 0.01), 0.4) 
+            left_temp = max(min(1.0, left_temp * 0.1), 0.4) 
             self.motor_driver.motor1.throttle =  left_temp
             self.motor_driver.motor3.throttle = left_temp
-            right_temp =  max(min(1.0, right_temp * 0.01), 0.4) 
+            right_temp =  max(min(1.0, right_temp * 0.1), 0.4) 
             self.motor_driver.motor2.throttle = right_temp
             self.motor_driver.motor4.throttle = right_temp
             rospy.loginfo('FLE: {0}, FRE: {1}, BLE: {2}, BRE:{3}'.format(left_temp, right_temp , round((left_temp / 1000), 2),  round((right_temp / 1000), 2)))
         elif data.angular.z != 0:
-            left_temp = max(min(1.0, left_temp * 0.01), 0.4) 
+            left_temp = max(min(1.0, left_temp * 0.1), 0.4) 
             self.motor_driver.motor1.throttle = left_temp
             self.motor_driver.motor3.throttle = left_temp
-            right_temp = max(min(1.0, left_temp * 0.01), 0.4) 
+            right_temp = max(min(1.0, left_temp * 0.1), 0.4) 
             self.motor_driver.motor2.throttle =  right_temp
             self.motor_driver.motor4.throttle =  right_temp
             rospy.loginfo('FLE: {0}, FRE: {1}, BLE: {2}, BRE:{3}'.format(left_temp, right_temp , round((left_temp / 1000), 2),  round((right_temp / 1000), 2)))
