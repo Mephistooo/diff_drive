@@ -32,39 +32,54 @@ class VelocityCommand():
         return (value - from_min) * (to_max - to_min) / (from_max - from_min) + to_min
 
     def set_pwm(self, data: Twist):
-        linear = min(1.0, max(-1.0, data.linear.x))
-        angular = min(1.0, max(-1.0, data.angular.z))
+        # linear = min(1.0, max(-1.0, data.linear.x))
+        # angular = min(1.0, max(-1.0, data.angular.z))
 
-        _left_temp = float(((2 * linear) - (angular * self.WHEEL_GAP)) / (2 * self.WHEEL_RADIUS))
-        _right_temp = float(((2 * linear) + (angular * self.WHEEL_GAP)) / (2 * self.WHEEL_RADIUS))
-        print(_left_temp, _right_temp)
+        # _left_temp = float(((2 * linear) - (angular * self.WHEEL_GAP)) / (2 * self.WHEEL_RADIUS))
+        # _right_temp = float(((2 * linear) + (angular * self.WHEEL_GAP)) / (2 * self.WHEEL_RADIUS))
+        # print(_left_temp, _right_temp)
 
-        left_temp = ((2 * linear) - (angular * self.WHEEL_GAP)) / (2 * self.WHEEL_RADIUS)
-        right_temp = ((2 * linear) + (angular * self.WHEEL_GAP)) / (2 * self.WHEEL_RADIUS)
-        if data.linear.x != 0:
-            left_temp = max(min(1.0, left_temp * 0.1), 0.4) 
-            self.motor_driver.motor1.throttle =  left_temp
-            self.motor_driver.motor3.throttle = left_temp
-            right_temp =  max(min(1.0, right_temp * 0.1), 0.4) 
-            self.motor_driver.motor2.throttle = right_temp
-            self.motor_driver.motor4.throttle = right_temp
-            rospy.loginfo('FLE: {0}, FRE: {1}, BLE: {2}, BRE:{3}'.format(left_temp, right_temp , round((left_temp / 1000), 2),  round((right_temp / 1000), 2)))
-        elif data.angular.z != 0:
-            left_temp = max(min(1.0, left_temp * 0.1), 0.4) 
-            self.motor_driver.motor1.throttle = left_temp
-            self.motor_driver.motor3.throttle = left_temp
-            right_temp = max(min(1.0, left_temp * 0.1), 0.4) 
-            self.motor_driver.motor2.throttle =  right_temp
-            self.motor_driver.motor4.throttle =  right_temp
-            rospy.loginfo('FLE: {0}, FRE: {1}, BLE: {2}, BRE:{3}'.format(left_temp, right_temp , round((left_temp / 1000), 2),  round((right_temp / 1000), 2)))
-        else:
+        # left_temp = ((2 * linear) - (angular * self.WHEEL_GAP)) / (2 * self.WHEEL_RADIUS)
+        # right_temp = ((2 * linear) + (angular * self.WHEEL_GAP)) / (2 * self.WHEEL_RADIUS)
+        # #rotation 
+        linear = message.linear.x
+        angular = message.angular.z
+        if linear == 0 :
+            right_speed = angular * self.WHEEL_GAP / 2.0
+            left_speed = -right_speed
+        # forward or backward
+        elif angular == 0 :
+            right_speed = left_speed = linear
+        else :
+            left_speed = linear - angular * self.WHEEL_GAP / 2.0
+            right_speed = linear + angular * self.WHEEL_GAP / 2.0
+            # self._left_speed_percent = (100 * left_speed/self._max_speed)
+            # self._right_speed_percent = (100 * right_speed/self._max_speed)
+            # speed = int(min(max(abs(speed_percent * 255), 0), 255))
+
+        # Calculate wheel speeds in m/s
+        # left_speed = linear - angular*self._wheel_base/2
+        # right_speed = linear + angular*self._wheel_base/2
+
+        # Ideally we'd now use the desired wheel speeds along
+        # with data from wheel speed sensors to come up with the
+        # power we need to apply to the wheels, but we don't have
+        # wheel speed sensors. Instead, we'll simply convert m/s
+        # into percent of maximum wheel speed, which gives us a
+        # duty cycle that we can apply to each motor.
+            self.motor_driver.motor1.throttle = left_speed
+            self.motor_driver.motor2.throttle = right_speed
+            self.motor_driver.motor3.throttle = left_speed
+            self.motor_driver.motor4.throttle = right_speed 
+        elif angular == 0 and linear == 0:
             self.motor_driver.motor1.throttle = 0
             self.motor_driver.motor2.throttle = 0 
             self.motor_driver.motor3.throttle = 0
             self.motor_driver.motor4.throttle = 0 
-        rospy.loginfo('FLE: {0}, FRE: {1}, BLE: {2}, BRE:{3}'.format(left_temp, right_temp , round((left_temp / 1000), 2),  round((right_temp / 1000), 2)))
 
-        print()
+        # rospy.loginfo('FLE: {0}, FRE: {1}, BLE: {2}, BRE:{3}'.format(left_temp, right_temp , round((left_temp / 1000), 2),  round((right_temp / 1000), 2)))
+
+ 
     def start_listening(self):
             rospy.Subscriber('/robot/cmd_vel', Twist, self.set_pwm)
             rospy.spin()
