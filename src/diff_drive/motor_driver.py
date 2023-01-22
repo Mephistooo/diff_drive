@@ -4,7 +4,6 @@ import _thread
 import time
 from typing import List
 from geometry_msgs.msg import Twist
-from haruto_msgs.msg import Velocity, PID, PWM
 import board
 from adafruit_motorkit import MotorKit
 
