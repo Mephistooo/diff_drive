@@ -37,19 +37,22 @@ class VelocityCommand():
         left_temp = ((2 * linear) - (angular * self.WHEEL_GAP)) / (2 * self.WHEEL_RADIUS)
         right_temp = ((2 * linear) + (angular * self.WHEEL_GAP)) / (2 * self.WHEEL_RADIUS)
         if data.linear.x != 0:
-            left_temp = round((map((left_temp * 100), -3000, 3000, -1000, 1000) / 1000), 2) 
-            self.motor_driver.motor1.throttle = left_temp
-            self.motor_driver.motor3.throttle = left_temp
-            right_temp =  round((map((right_temp * 100), -3000, 3000, -1000, 1000) / 1000), 2) 
-            self.motor_driver.motor2.throttle = right_temp
-            self.motor_driver.motor4.throttle = right_temp 
+            left_temp =  map((left_temp * 100), -3000, 3000, -1000, 1000)
+            self.motor_driver.motor1.throttle =  round((left_temp / 1000), 2)
+            self.motor_driver.motor3.throttle = round((left_temp / 1000), 2)
+            right_temp = map((right_temp * 100), -3000, 3000, -1000, 1000)
+            self.motor_driver.motor2.throttle =  round((right_temp / 1000), 2)
+            self.motor_driver.motor4.throttle = round((right_temp / 1000), 2) 
+            rospy.loginfo('FLE: {0}, FRE: {1}, BLE: {2}, BRE:{3}'.format(round((left_temp / 1000), 2),  round((right_temp / 1000), 2) , round((left_temp / 1000), 2),  round((right_temp / 1000), 2) )
+
         elif data.angular.z != 0:
-            left_temp = round((map((left_temp * 100), -400, 400, -1000, 1000) / 1000), 2) 
-            self.motor_driver.motor1.throttle = left_temp
-            self.motor_driver.motor3.throttle = left_temp
-            right_temp = round((map((right_temp * 100), -400, 400, -1000, 1000) / 1000), 2)
-            self.motor_driver.motor2.throttle = right_temp
-            self.motor_driver.motor4.throttle = right_temp 
+            left_temp = map((left_temp * 100), -400, 400, -1000, 1000)
+            self.motor_driver.motor1.throttle = round((left_temp / 1000), 2)
+            self.motor_driver.motor3.throttle = round((left_temp / 1000), 2)
+            right_temp = map((right_temp * 100), -400, 400, -1000, 1000)
+            self.motor_driver.motor2.throttle =  round((right_temp / 1000), 2)
+            self.motor_driver.motor4.throttle =  round((right_temp / 1000), 2) 
+            rospy.loginfo('FLE: {0}, FRE: {1}, BLE: {2}, BRE:{3}'.format(round((left_temp / 1000), 2),  round((right_temp / 1000), 2) , round((left_temp / 1000), 2),  round((right_temp / 1000), 2) )
         else:
             self.motor_driver.motor1.throttle = 0
             self.motor_driver.motor2.throttle = 0 
