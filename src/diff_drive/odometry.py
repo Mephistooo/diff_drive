@@ -9,8 +9,8 @@ class Odometry:
     """
 
     def __init__(self):
-        self.leftEncoder = Encoder()
-        self.rightEncoder = Encoder()
+        self.leftEncoder = Encoder(20, 21)
+        self.rightEncoder = Encoder(16, 19)
         self.pose = Pose()
         self.lastTime = 0
 
@@ -73,7 +73,7 @@ class Odometry:
         self.lastTime = newTime
 
     def getPose(self):
-        return self.pose;
+        return self.pose
 
     def setPose(self, newPose):
         self.pose = newPose
