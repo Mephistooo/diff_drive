@@ -72,8 +72,8 @@ class VelocityCommand():
         # duty cycle that we can apply to each motor.
         _left_speed_percent = (0.01 * left_speed/1.0)
         _right_speed_percent = (0.01 * right_speed/1.0)
-        speed_percent = int(min(max(abs(speed_percent * 1.0), 0), 1.0))
-        rospy.loginfo('FLE: {0}, FRE: {1}, percent_l {2}, percent_r {3}, total {4}'.format(left_speed, right_speed, _left_speed_percent, _right_speed_percent, speed_percent))
+        speed_percent = float(min(max(abs(speed_percent * 1.0), 0), 1.0))
+        rospy.loginfo('FLE: {0}, FRE: {1}, p_l {2}, p_r {3}, p {4}'.format(left_speed, right_speed, _left_speed_percent, _right_speed_percent, speed_percent))
         self.motor_driver.motor1.throttle = left_speed
         self.motor_driver.motor2.throttle = right_speed
         self.motor_driver.motor3.throttle = left_speed
