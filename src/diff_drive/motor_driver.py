@@ -8,19 +8,15 @@ import board
 from adafruit_motorkit import MotorKit
 
 class VelocityCommand():
-    LINEAR_VELOCITY_MAX_LIMIT = 1.0
-    LINEAR_VELOCITY_MIN_LIMIT = -1.0
-    ANGULAR_VELOCITY_MAX_LIMIT = 1.0
-    ANGULAR_VELOCITY_MIN_LIMIT = -1.0
-    WHEEL_RADIUS = 0.038
-    WHEEL_GAP = 0.2
-
 
     def __init__(self):
         self.min = 0.4
         self.max = 1.0
         self.motor_driver = MotorKit(i2c=board.I2C())
         rospy.init_node('diff_motor_controller')
+        self.WHEEL_RADIUS = 0.038
+        self.WHEEL_GAP = 0.2
+
         
 
     def map(value: float, from_min: int, from_max: int, to_min: int, to_max: int):
@@ -35,11 +31,11 @@ class VelocityCommand():
         return (value - from_min) * (to_max - to_min) / (from_max - from_min) + to_min
 
     def set_pwm(self, data: Twist):
-        linear = min(LINEAR_VELOCITY_MAX_LIMIT, max(LINEAR_VELOCITY_MIN_LIMIT, data.linear.x))
-        angular = min(ANGULAR_VELOCITY_MAX_LIMIT, max(ANGULAR_VELOCITY_MIN_LIMIT, data.angular.z))
+        linear = min(1.0, max(-1.0, data.linear.x))
+        angular = min(1.0, max(-1.0, data.angular.z))
 
-        left_temp = ((2 * linear) - (angular * WHEEL_GAP)) / (2 * WHEEL_RADIUS)
-        right_temp = ((2 * linear) + (angular * WHEEL_GAP)) / (2 * WHEEL_RADIUS)
+        left_temp = ((2 * linear) - (angular * self.WHEEL_GAP)) / (2 * self.WHEEL_RADIUS)
+        right_temp = ((2 * linear) + (angular * self.WHEEL_GAP)) / (2 * self.WHEEL_RADIUS)
         if data.linear.x != 0:
             left_temp = round((map((left_temp * 100), -3000, 3000, -1000, 1000) / 1000), 2) 
             self.motor_driver.motor1.throttle = left_temp
