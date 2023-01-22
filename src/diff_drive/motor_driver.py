@@ -20,6 +20,7 @@ class VelocityCommand():
         self.min = 0.4
         self.max = 1.0
         self.motor_driver = MotorKit(i2c=board.I2C())
+        rospy.init_node('diff_motor_controller')
         
 
     def map(value: float, from_min: int, from_max: int, to_min: int, to_max: int):
