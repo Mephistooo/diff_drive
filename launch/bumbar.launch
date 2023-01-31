@@ -17,8 +17,8 @@
   <node name="odom_publisher" pkg="diff_drive" type="diff_drive_odometry"
         output="screen">
     <rosparam subst_value="true">
-      ticks_per_meter: $(arg ticks_per_meter)
-      wheel_separation: $(arg wheel_separation)
+      ticks_per_meter: 17550
+      wheel_separation: 0.2
     </rosparam>
   </node>
 
@@ -49,7 +49,9 @@
     <param name="~forwardMovementOnly" value="false" />
     <remap from="cmd_vel" to="/robot/cmd_vel" />
   </node>
-
+ <node name="diff_imu_publisher" pkg="diff_drive"
+        type="diff_imu_publisher" output="screen">
+  </node>
   <!-- <node name="rviz" pkg="rviz" type="rviz"
         args="-d $(find diff_drive)/config/view.rviz" /> -->
 
