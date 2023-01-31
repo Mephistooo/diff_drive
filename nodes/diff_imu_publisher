@@ -89,7 +89,6 @@ def imu_publisher():
                 imu_msg.angular_velocity_covariance[0] = -1
                 imu_msg.linear_acceleration_covariance[0] = -1
                 imu_pub.publish(imu_msg)
-                print("sending")
             last_time = current_time
             #rate.sleep()
         else:
