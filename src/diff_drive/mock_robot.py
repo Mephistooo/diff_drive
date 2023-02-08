@@ -22,8 +22,6 @@ class MockRobot:
         self.rightTicks = 0
         self.minTicks = -32768
         self.maxTicks = 32767
-        self.left_wheel_encoder = _encoder()
-        self.right_wheel_encoder = _encoder()
 
     def setSpeeds(self, left, right):
         self.newLeftSpeed = left
