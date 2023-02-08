@@ -24,8 +24,8 @@ def wheel_encoder_publisher():
     while not rospy.is_shutdown():
     # Pausing for `tsample` to give CPU time to process encoder signal
         time.sleep(0.002)
-        left_wheel_pub(Int32(left_wheel_encoder.steps))
-        right_wheel_pub(Int32(left_wheel_encoder.steps))
+        left_wheel_pub(Int32(left_wheel_encoder.read()))
+        right_wheel_pub(Int32(left_wheel_encoder.read()))
 
 if __name__ == '__main__':
     try:
