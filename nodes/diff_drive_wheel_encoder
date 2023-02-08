@@ -6,7 +6,7 @@ import tf
 from std_msgs.msg import Int32
 from math import sqrt,atan2,cos,sin,pi
 import time
-from diff_drive import encoder
+from  Encoder import Encoder as _encoder
 
 PPM = 13610
 
@@ -15,8 +15,8 @@ PPR = 1361
 MPM = 1.7
 
 def wheel_encoder_publisher():
-    left_wheel_encoder = encoder.Encoder(20, 21)
-    right_wheel_encoder = encoder.Encoder(16, 19)
+    left_wheel_encoder = _encoder(20, 21)
+    right_wheel_encoder = _encoder(16, 19)
     left_wheel_pub = rospy.Publisher('lwheel_ticks', Int32, queue_size=50)
     right = rospy.Publisher('rwheel_ticks', Int32, queue_size=50)
     rospy.init_node('wheel_encoder_publisher', anonymous=True)
