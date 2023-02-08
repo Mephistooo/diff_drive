@@ -58,7 +58,7 @@ class VelocityCommand():
         self.motor_driver.motor4.throttle = right_speed 
         
     def start_listening(self):
-            rospy.Subscriber('/robot/cmd_vel', Twist, self.set_pwm)
+            rospy.Subscriber('/cmd_vel', Twist, self.set_pwm)
             rospy.spin()
 
 
