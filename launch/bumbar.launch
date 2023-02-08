@@ -53,7 +53,7 @@
  <node name="diff_imu_publisher" pkg="diff_drive"
         type="diff_imu_publisher" output="screen" respawn="true">
   </node>
-  node name="diff_drvie_wheel_encoder" pkg="diff_drive"
+  <node name="diff_drvie_wheel_encoder" pkg="diff_drive"
         type="diff_drvie_wheel_encoder" output="screen" respawn="true">
   </node>
 
