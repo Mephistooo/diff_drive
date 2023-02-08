@@ -1,6 +1,7 @@
 from __future__ import division
 
 from  Encoder import Encoder as _encoder
+
 import time 
 
 class Encoder:
@@ -14,7 +15,7 @@ class Encoder:
         self.gpio_encoder = _encoder(pin_a, pin_b)
         self.ppr = 40000  # Pulses Per Revolution of the encoder
         self.tstop = 20  # Loop execution duration (s)
-        self.tsample = 0.02  # Sampling period for code execution (s)
+        self.tsample = 0.002  # Sampling period for code execution (s)
         self.tdisp = 0.5  # Sampling period for values display (s)
 
     def setRange(self, low, high):
@@ -57,11 +58,11 @@ class Encoder:
             'highThresh': self.highThresh
         }
     
-    # def get_ticks(self):
-    #     while tcurr <= tstop:
-    #         time.sleep(tsample)
-    #         tcurr = time.perf_counter() - tstart
-    #         left_ticks = 360 / ppr * encoder1.read()
-    #         right_ticks = 360 / ppr * encoder2.read()
-    #         tprev = tcurr
+    def get_ticks(self):
+        while tcurr <= tstop:
+            time.sleep(tsample)
+            tcurr = time.perf_counter() - tstart
+            left_ticks = 360 / ppr * encoder1.read()
+            right_ticks = 360 / ppr * encoder2.read()
+            tprev = tcurr
 
