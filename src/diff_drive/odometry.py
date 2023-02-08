@@ -38,7 +38,7 @@ class Odometry:
         of the two wheels. See https://chess.eecs.berkeley.edu/eecs149/documentation/differentialDrive.pdf
         for details.
         """
-        leftTravel = self.leftEncoder.getDelta() / self.ticksPerMeter
+        leftTravel = self.leftEncoder.gpio_encoder.read() / self.ticksPerMeter
         rightTravel = self.rightEncoder.getDelta() / self.ticksPerMeter
         deltaTime = newTime - self.lastTime
 
