@@ -7,7 +7,7 @@ from typing import List
 from geometry_msgs.msg import Twist
 import board
 from adafruit_motorkit import MotorKit
-
+import atexit
 class VelocityCommand():
 
     def __init__(self):
