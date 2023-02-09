@@ -16,7 +16,7 @@ class VelocityCommand():
         self.motor_driver = MotorKit(i2c=board.I2C())
         rospy.init_node('diff_motor_controller')
         self.WHEEL_RADIUS = 0.038
-        self.WHEEL_GAP = 0.2
+        self.WHEEL_GAP = 0.18
         self.speed = []
 
 
@@ -30,6 +30,8 @@ class VelocityCommand():
             :param to_max: int    
         """
         return (value - from_min) * (to_max - to_min) / (from_max - from_min) + to_min
+
+   
 
     def set_pwm(self, data: Twist):
         # #rotation 
@@ -48,14 +50,26 @@ class VelocityCommand():
             left_speed = linear - angular * self.WHEEL_GAP / 2.0
             right_speed = linear + angular * self.WHEEL_GAP / 2.0
 
+        # prece = int(speed_percent / 255 * 100)
+        # speed = int(min(max(abs(speed_percent * 255), 0), 255))
+
         # _left_speed_percent = (0.01 * left_speed/1.0)
-        # _right_speed_percent = (0.01 * right_speed/1.0)
-        # speed_percent = float(min(max(abs(_left_speed_percent * 1.0), 0), 1.0))
-        rospy.loginfo('FLE: {0}, FRE: {1}'.format(left_speed, right_speed))
-        self.motor_driver.motor1.throttle = left_speed
-        self.motor_driver.motor2.throttle = right_speed
-        self.motor_driver.motor3.throttle = left_speed
-        self.motor_driver.motor4.throttle = right_speed 
+        #  _right_speed_percent = (0.01 * right_speed/1.0)
+
+        left_speed_percent = float(min(max(abs(left_speed * 0.1), 0.5), 1.0))
+        right_speed_percent = float(min(max(abs(right_speed * 0.1), 0.5), 1.0))
+
+        rospy.loginfo('FLE: {0}, FRE: {1}'.format(left_speed_percent , right_speed_percent))
+        self.motor_driver.motor1.throttle = left_speed_percent 
+        self.motor_driver.motor2.throttle = right_speed_percent 
+        self.motor_driver.motor3.throttle = left_speed_percent 
+        self.motor_driver.motor4.throttle = right_speed_percent 
+    
+    def stopAll(self):
+        self.motor_driver.motor1.throttle = 0
+        self.motor_driver.motor2.throttle = 0
+        self.motor_driver.motor3.throttle = 0
+        self.motor_driver.motor4.throttle = 0 
         
     def start_listening(self):
             rospy.Subscriber('/cmd_vel', Twist, self.set_pwm)
@@ -64,5 +78,9 @@ class VelocityCommand():
 
 if __name__ == '__main__':
     velocity_command = VelocityCommand()
-    # _thread.start_new_thread(velocity_command.set_pwm, ())
-    velocity_command.start_listening()
+    try :
+        # _thread.start_new_thread(velocity_command.set_pwm, ())
+        velocity_command.start_listening()
+    except rospy.ROSInterruptException:
+        velocity_command.stopAll()
+        pass
