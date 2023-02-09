@@ -13,7 +13,7 @@ import tf
 from sensor_msgs.msg import Imu
 from geometry_msgs.msg import Vector3
 from math import sqrt,atan2,cos,sin,pi
-
+import traceback
 
 def imu_publisher():
 
@@ -44,6 +44,7 @@ def imu_publisher():
     rospy.loginfo("waiting for device...")
     while not rospy.is_shutdown():
         try: 
+            rate.sleep(0.1)
             gyro_data = mpu.get_gyro_data()
             if len(gyro_data) >1:  #received complete packet
                 current_time = rospy.Time.now()
@@ -91,12 +92,11 @@ def imu_publisher():
                     imu_msg.linear_acceleration_covariance[0] = -1
                     imu_pub.publish(imu_msg)
                 last_time = current_time
-                rate.sleep(0.02)
             else:
                 rospy.loginfo("received incomplete data from mpu6050")
                 continue
         except:
-            rospy.loginfo("received incomplete data from mpu6050")
+            rospy.loginfo(traceback.format_exec())
             continue
              
 
