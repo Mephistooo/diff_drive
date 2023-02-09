@@ -46,7 +46,7 @@ class VelocityCommand():
             return
         # rotation 
         elif linear == 0 :
-            right_speed = angular * self.WHEEL_GAP / 2.0
+            right_speed = (angular * 100) * self.WHEEL_GAP / 2.0
             left_speed = -right_speed
         # forward or backward
         elif angular == 0 :
