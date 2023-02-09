@@ -96,7 +96,7 @@ def imu_publisher():
                 rospy.loginfo("received incomplete data from mpu6050")
                 continue
         except:
-            rospy.loginfo(traceback.format_exec())
+            rospy.loginfo(traceback.format_exc())
             continue
              
 
