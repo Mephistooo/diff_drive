@@ -8,6 +8,7 @@ from geometry_msgs.msg import Twist
 import board
 from adafruit_motorkit import MotorKit
 import atexit
+
 class VelocityCommand():
 
     def __init__(self):
@@ -38,18 +39,18 @@ class VelocityCommand():
         # #rotation 
         linear = data.linear.x
         angular = data.angular.z
-        if linear == 0 :
-            right_speed = angular * self.WHEEL_GAP / 2.0
-            left_speed = -right_speed
-        # forward or backward
-        elif angular == 0 :
-            right_speed = left_speed = linear
-        elif angular == 0 and linear == 0:
+        if angular == 0 and linear == 0:
             self.motor_driver.motor1.throttle = 0
             self.motor_driver.motor2.throttle = 0
             self.motor_driver.motor3.throttle = 0
             self.motor_driver.motor4.throttle = 0
             return
+        elif linear == 0 :
+            right_speed = angular * self.WHEEL_GAP / 2.0
+            left_speed = -right_speed
+        # forward or backward
+        elif angular == 0 :
+            right_speed = left_speed = linear
         else :
             left_speed = linear - angular * self.WHEEL_GAP / 2.0
             right_speed = linear + angular * self.WHEEL_GAP / 2.0
@@ -64,10 +65,10 @@ class VelocityCommand():
         right_speed_percent = float(min(max(abs(right_speed * 0.1), 0.5), 1.0))
 
         rospy.loginfo('FLE: {0}, FRE: {1}'.format(left_speed_percent , right_speed_percent))
-        self.motor_driver.motor1.throttle = left_speed_percent 
-        self.motor_driver.motor2.throttle = right_speed_percent 
-        self.motor_driver.motor3.throttle = left_speed_percent 
-        self.motor_driver.motor4.throttle = right_speed_percent 
+        self.motor_driver.motor1.throttle = -left_speed_percent if linear < 0 or left_speed_percent
+        self.motor_driver.motor2.throttle = -right_speed_percent if linear < 0 or right_speed_percent
+        self.motor_driver.motor3.throttle = -left_speed_percent if linear < 0 or left_speed_percent 
+        self.motor_driver.motor4.throttle = -right_speed_percent if linear < 0 or right_speed_percent 
     
     def stopAll(self):
         self.motor_driver.motor1.throttle = 0
