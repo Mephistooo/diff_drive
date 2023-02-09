@@ -44,7 +44,7 @@ def imu_publisher():
     rospy.loginfo("waiting for device...")
     while not rospy.is_shutdown():
         try: 
-            rate.sleep(0.1)
+            rate.sleep()
             gyro_data = mpu.get_gyro_data()
             if len(gyro_data) >1:  #received complete packet
                 current_time = rospy.Time.now()
