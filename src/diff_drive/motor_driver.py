@@ -65,10 +65,11 @@ class VelocityCommand():
         right_speed_percent = float(min(max(abs(right_speed * 0.1), 0.5), 1.0))
 
         rospy.loginfo('FLE: {0}, FRE: {1}'.format(left_speed_percent , right_speed_percent))
-        self.motor_driver.motor1.throttle = -left_speed_percent if linear < 0 or left_speed_percent
-        self.motor_driver.motor2.throttle = -right_speed_percent if linear < 0 or right_speed_percent
-        self.motor_driver.motor3.throttle = -left_speed_percent if linear < 0 or left_speed_percent 
-        self.motor_driver.motor4.throttle = -right_speed_percent if linear < 0 or right_speed_percent 
+
+        self.motor_driver.motor1.throttle = -left_speed_percent if left_speed < 0 else left_speed_percent
+        self.motor_driver.motor2.throttle = -right_speed_percent if right_speed < 0 else right_speed_percent
+        self.motor_driver.motor3.throttle = -left_speed_percent if left_speed < 0 else left_speed_percent 
+        self.motor_driver.motor4.throttle = -right_speed_percent if right_speed < 0 else right_speed_percent 
     
     def stopAll(self):
         self.motor_driver.motor1.throttle = 0
