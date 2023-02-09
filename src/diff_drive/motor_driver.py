@@ -61,8 +61,8 @@ class VelocityCommand():
         # _left_speed_percent = (0.01 * left_speed/1.0)
         #  _right_speed_percent = (0.01 * right_speed/1.0)
 
-        left_speed_percent = float(min(max(abs(left_speed * 0.1), 0.5), 1.0))
-        right_speed_percent = float(min(max(abs(right_speed * 0.1), 0.5), 1.0))
+        left_speed_percent = float(min(max(abs(left_speed * 1), 0.5), 1.0))
+        right_speed_percent = float(min(max(abs(right_speed * 1), 0.5), 1.0))
 
         rospy.loginfo('FLE: {0}, FRE: {1}'.format(left_speed_percent , right_speed_percent))
 
