@@ -44,3 +44,6 @@ class Controller:
 
     def setTicksPerMeter(self, ticks):
         self.ticksPerMeter = ticks
+
+    def stopAll(self):
+        self.
