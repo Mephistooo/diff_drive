@@ -75,9 +75,8 @@ class VelocityCommand():
     def start_listening(self):
             rospy.Subscriber('/cmd_vel', Twist, self.set_pwm)
             rospy.spin()
-
-    @staticmethod
-    def stop():
+            
+    def stop(self):
         """Stop all movement."""
         self.motor_driver.motor1.throttle = 0
         self.motor_driver.motor2.throttle = 0
