@@ -35,8 +35,7 @@ class VelocityCommand():
 
    
 
-    def set_pwm(self, data: Twist):
-        # #rotation 
+    def set_pwm(self, data: Twist): 
         linear = data.linear.x
         angular = data.angular.z
         if angular == 0 and linear == 0:
@@ -45,6 +44,7 @@ class VelocityCommand():
             self.motor_driver.motor3.throttle = 0
             self.motor_driver.motor4.throttle = 0
             return
+        # rotation 
         elif linear == 0 :
             right_speed = angular * self.WHEEL_GAP / 2.0
             left_speed = -right_speed
