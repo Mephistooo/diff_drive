@@ -45,8 +45,11 @@ class VelocityCommand():
         elif angular == 0 :
             right_speed = left_speed = linear
         elif angular == 0 and linear == 0:
-            left_speed = 0
-            right_speed = 0 
+            self.motor_driver.motor1.throttle = 0
+            self.motor_driver.motor2.throttle = 0
+            self.motor_driver.motor3.throttle = 0
+            self.motor_driver.motor4.throttle = 0
+            return
         else :
             left_speed = linear - angular * self.WHEEL_GAP / 2.0
             right_speed = linear + angular * self.WHEEL_GAP / 2.0
