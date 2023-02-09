@@ -19,7 +19,7 @@ class OdometryNode:
         self.odometry = odometry.Odometry()
 
     def main(self):
-        self.odomPub = rospy.Publisher('odom', Odometry, queue_size=10)
+        self.odomPub = rospy.Publisher('odomtery', Odometry, queue_size=10)
         self.tfPub = TransformBroadcaster()
 
         rospy.init_node('diff_drive_odometry')
@@ -31,8 +31,8 @@ class OdometryNode:
         rospy.Subscriber("initialpose", PoseWithCovarianceStamped,
                          self.on_initial_pose)
 
-        self.ticksPerMeter = int(rospy.get_param('~ticks_per_meter', 17550))
-        self.wheelSeparation = float(rospy.get_param('~wheel_separation', 0.2))
+        self.ticksPerMeter = int(rospy.get_param('~ticks_per_meter', 13610))
+        self.wheelSeparation = float(rospy.get_param('~wheel_separation', 0.18))
         self.rate = float(rospy.get_param('~rate', 10.0))
         self.baseFrameID = rospy.get_param('~base_frame_id', 'base_link')
         self.odomFrameID = rospy.get_param('~odom_frame_id', 'odom')
