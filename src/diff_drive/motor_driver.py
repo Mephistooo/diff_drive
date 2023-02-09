@@ -18,6 +18,7 @@ class VelocityCommand():
         self.WHEEL_RADIUS = 0.038
         self.WHEEL_GAP = 0.18
         self.speed = []
+        atexit.register(self.stop)
 
 
     def map(value: float, from_min: int, from_max: int, to_min: int, to_max: int):
@@ -75,6 +76,13 @@ class VelocityCommand():
             rospy.Subscriber('/cmd_vel', Twist, self.set_pwm)
             rospy.spin()
 
+    @staticmethod
+    def stop():
+        """Stop all movement."""
+        self.motor_driver.motor1.throttle = 0
+        self.motor_driver.motor2.throttle = 0
+        self.motor_driver.motor3.throttle = 0
+        self.motor_driver.motor4.throttle = 0 
 
 if __name__ == '__main__':
     velocity_command = VelocityCommand()
