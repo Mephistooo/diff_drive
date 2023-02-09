@@ -27,7 +27,7 @@ class ControllerNode:
         rospy.Subscriber("cmd_vel", Twist, self.twistCallback)
 
         self.ticksPerMeter = float(rospy.get_param('~ticks_per_meter', 13610))
-        self.wheelSeparation = float(rospy.get_param('~wheel_separation', 0.18))
+        self.wheelSeparation = float(rospy.get_param('~wheel_separation', 0.2))
         self.maxMotorSpeed = int(rospy.get_param('~max_motor_speed', 1.0))
         self.rate = float(rospy.get_param('~rate', 10.0))
         self.timeout = float(rospy.get_param('~timeout', 0.2))
@@ -62,5 +62,4 @@ if __name__ == '__main__':
         node = ControllerNode()
         node.main()
     except rospy.ROSInterruptException:
-        
         pass
