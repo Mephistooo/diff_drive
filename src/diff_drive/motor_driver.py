@@ -39,7 +39,7 @@ class VelocityCommand():
    
 
     def set_pwm(self, data: Twist): 
-        # rate = rospy.Rate(10)
+        rate = rospy.Rate(10)
         self._last_received = rospy.get_time()
         linear = data.linear.x
         angular = data.angular.z
@@ -71,11 +71,11 @@ class VelocityCommand():
 
         self.left_speed= -left_speed_percent if left_speed < 0 else left_speed_percent
         self.right_speed = -right_speed_percent if right_speed < 0 else right_speed_percent
-        # self.motor_driver.motor1.throttle = self.left_speed
-        # self.motor_driver.motor2.throttle = self.right_speed
-        # self.motor_driver.motor3.throttle = self.left_speed
-        # self.motor_driver.motor4.throttle = self.right_speed
-        # rate.sleep()
+        self.motor_driver.motor1.throttle = self.left_speed
+        self.motor_driver.motor2.throttle = self.right_speed
+        self.motor_driver.motor3.throttle = self.left_speed
+        self.motor_driver.motor4.throttle = self.right_speed
+        rate.sleep()
 
     def stopAll(self):
         self.motor_driver.motor1.throttle = 0
@@ -102,22 +102,10 @@ class VelocityCommand():
 
 if __name__ == '__main__':
     velocity_command = VelocityCommand()
-    velocity_command.start_listening()
     # velocity_command.start_listening()
     try :
-        # _thread.start_new_thread(velocity_command.set_pwm, ())  
-        rate = rospy.Rate(self._rate)
-        while not rospy.is_shutdown():
-                # If we haven't received new commands for a while, we
-                # may have lost contact with the commander-- stop
-                # moving
-            delay = rospy.get_time() - self._last_received
-            if delay < self._timeout:
-                self.set_speed()
-                # self._right_motor.move(self._right_speed_percent)
-            else:
-                self.stopAll()
-            rate.sleep()
+        # _thread.start_new_thread(velocity_command.set_pwm, ())
+        velocity_command.start_listening()
     except rospy.ROSInterruptException:
         velocity_command.stopAll()
         pass
