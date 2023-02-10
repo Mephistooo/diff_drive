@@ -23,7 +23,7 @@ def imu_publisher():
     gyro_z_offset = 0.0
     pub_freq = 10
     count = 0
-    num_callibration_itrs = 2000
+    num_callibration_itrs = 200
     debug = False
 
     linearaccel_pub = rospy.Publisher('linearaccel', Vector3, queue_size=50)
