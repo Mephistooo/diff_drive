@@ -112,7 +112,7 @@ class VelocityCommand():
 
 if __name__ == '__main__':
     velocity_command = VelocityCommand()
-    velocity_command.start_listening
+    velocity_command.start_listening()
     try :
         # _thread.start_new_thread(velocity_command.set_pwm, ())
         velocity_command.run()
