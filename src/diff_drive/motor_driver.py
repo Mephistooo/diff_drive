@@ -71,6 +71,10 @@ class VelocityCommand():
 
         self.left_speed= -left_speed_percent if left_speed < 0 else left_speed_percent
         self.right_speed = -right_speed_percent if right_speed < 0 else right_speed_percent
+        self.motor_driver.motor1.throttle = self.left_speed
+        self.motor_driver.motor2.throttle = self.right_speed
+        self.motor_driver.motor3.throttle = self.left_speed
+        self.motor_driver.motor4.throttle = self.right_speed
         # rate.sleep()
 
     def stopAll(self):
@@ -84,18 +88,6 @@ class VelocityCommand():
         self.motor_driver.motor2.throttle = self.right_speed
         self.motor_driver.motor3.throttle = self.left_speed
         self.motor_driver.motor4.throttle = self.right_speed
-        
-    def run(self):
-        """The control loop of the driver."""
-        rate = rospy.Rate(self._rate)
-        while not rospy.is_shutdown():
-            rospy.loginfo('Called set speed {} left {} right'.format(self.fleft_speed , self.right_speed))
-            delay = rospy.get_time() - self._last_received
-            if delay < self._timeout:
-                self.set_speed()
-            else:
-                self.stopAll()
-            rate.sleep()
 
     def start_listening(self):
             rospy.Subscriber('/cmd_vel', Twist, self.set_pwm)
@@ -110,10 +102,10 @@ class VelocityCommand():
 
 if __name__ == '__main__':
     velocity_command = VelocityCommand()
-    velocity_command.start_listening()
+    # velocity_command.start_listening()
     try :
         # _thread.start_new_thread(velocity_command.set_pwm, ())
-        velocity_command.run()
+        velocity_command.start_listening()
     except rospy.ROSInterruptException:
         velocity_command.stopAll()
         pass
