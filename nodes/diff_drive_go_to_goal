@@ -38,7 +38,7 @@ class GoToGoalNode:
         self.node_name = rospy.get_name()
         rospy.loginfo("{0} started".format(self.node_name))
 
-        rospy.Subscriber('odom', Odometry, self.on_odometry)
+        rospy.Subscriber('odomerty', Odometry, self.on_odometry)
         rospy.Subscriber('move_base_simple/goal', PoseStamped, self.on_goal)
 
         self.goal_achieved_pub = rospy.Publisher('goal_achieved', Bool,
@@ -59,7 +59,7 @@ class GoToGoalNode:
             rospy.get_param('~angular_tolerance', 3/180*pi))
 
         self.controller.set_max_linear_speed(
-            rospy.get_param('~max_linear_speed', 0.2))
+            rospy.get_param('~max_linear_speed', 0.9))
         self.controller.set_min_linear_speed(
             rospy.get_param('~min_linear_speed', 0))
         self.controller.set_max_angular_speed(
@@ -70,13 +70,8 @@ class GoToGoalNode:
             rospy.get_param('~max_linear_acceleration', 0.1))
         self.controller.set_max_angular_acceleration(
             rospy.get_param('~max_angular_acceleration', 0.3))
-
-        # Set whether to allow movement backward. Backward movement is
-        # safe if the robot can avoid obstacles while traveling in
-        # reverse. We default to forward movement only since many
-        # sensors are front-facing.
         self.controller.set_forward_movement_only(
-            rospy.get_param('~forwardMovementOnly', True))
+            rospy.get_param('~forwardMovementOnly', False))
 
         self.init_pose()
         self.goal = None
