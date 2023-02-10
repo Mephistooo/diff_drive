@@ -43,20 +43,20 @@ class VelocityCommand():
         self._last_received = rospy.get_time()
         linear = data.linear.x
         angular = data.angular.z
-        # if angular == 0 and linear == 0:
-        #     self.motor_driver.motor1.throttle = 0
-        #     self.motor_driver.motor2.throttle = 0
-        #     self.motor_driver.motor3.throttle = 0
-        #     self.motor_driver.motor4.throttle = 0
-        #     return
-        # # rotation 
-        # elif linear == 0 :
-        #     right_speed = angular * self.WHEEL_GAP / 2.0
-        #     left_speed = -right_speed
-        # # forward or backward
-        # elif angular == 0 :
-        #     right_speed = left_speed = linear
-        # else :
+        if angular == 0 and linear == 0:
+            self.motor_driver.motor1.throttle = 0
+            self.motor_driver.motor2.throttle = 0
+            self.motor_driver.motor3.throttle = 0
+            self.motor_driver.motor4.throttle = 0
+            return
+        # rotation 
+        elif linear == 0 :
+            right_speed = angular * self.WHEEL_GAP / 2.0
+            left_speed = -right_speed
+        # forward or backward
+        elif angular == 0 :
+            right_speed = left_speed = linear
+        else :
         left_speed = linear - angular * self.WHEEL_GAP / 2.0
         right_speed = linear + angular * self.WHEEL_GAP / 2.0
 
@@ -80,10 +80,10 @@ class VelocityCommand():
         self.motor_driver.motor4.throttle = 0 
     
     def set_speed(self):
-        self.motor_driver.motor1.throttle = 0
-        self.motor_driver.motor2.throttle = 0
-        self.motor_driver.motor3.throttle = 0
-        self.motor_driver.motor4.throttle = 0 
+        self.motor_driver.motor1.throttle = self.left_speed
+        self.motor_driver.motor2.throttle = self.right_speed
+        self.motor_driver.motor3.throttle = self.left_speed
+        self.motor_driver.motor4.throttle = self.right_speed
         
     def run(self):
         """The control loop of the driver."""
