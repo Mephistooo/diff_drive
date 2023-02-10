@@ -38,7 +38,7 @@ class GoToGoalNode:
         self.node_name = rospy.get_name()
         rospy.loginfo("{0} started".format(self.node_name))
 
-        rospy.Subscriber('odomerty', Odometry, self.on_odometry)
+        rospy.Subscriber('odom', Odometry, self.on_odometry)
         rospy.Subscriber('move_base_simple/goal', PoseStamped, self.on_goal)
 
         self.goal_achieved_pub = rospy.Publisher('goal_achieved', Bool,
