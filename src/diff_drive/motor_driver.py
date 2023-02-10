@@ -89,9 +89,7 @@ class VelocityCommand():
         """The control loop of the driver."""
         rate = rospy.Rate(self._rate)
         while not rospy.is_shutdown():
-            # If we haven't received new commands for a while, we
-            # may have lost contact with the commander-- stop
-            # moving
+            rospy.loginfo('Called set speed {} left {} right'.format(self.fleft_speed , self.right_speed))
             delay = rospy.get_time() - self._last_received
             if delay < self._timeout:
                 self.set_speed()
