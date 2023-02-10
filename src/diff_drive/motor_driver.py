@@ -18,9 +18,12 @@ class VelocityCommand():
         rospy.init_node('diff_motor_controller')
         self.WHEEL_RADIUS = 0.038
         self.WHEEL_GAP = 0.18
-        self.speed = []
         atexit.register(self.stop)
-
+        self.left_speed = 0
+        self.right_speed = 0 
+        self._last_received = rospy.get_time()
+        self._timeout = rospy.get_param('~timeout', 2)
+        self._rate = rospy.get_param('~rate', 10)
 
     def map(value: float, from_min: int, from_max: int, to_min: int, to_max: int):
         """
@@ -36,25 +39,26 @@ class VelocityCommand():
    
 
     def set_pwm(self, data: Twist): 
-        rate = rospy.Rate(10)
+        # rate = rospy.Rate(10)
+        self._last_received = rospy.get_time()
         linear = data.linear.x
         angular = data.angular.z
-        if angular == 0 and linear == 0:
-            self.motor_driver.motor1.throttle = 0
-            self.motor_driver.motor2.throttle = 0
-            self.motor_driver.motor3.throttle = 0
-            self.motor_driver.motor4.throttle = 0
-            return
-        # rotation 
-        elif linear == 0 :
-            right_speed = angular * self.WHEEL_GAP / 2.0
-            left_speed = -right_speed
-        # forward or backward
-        elif angular == 0 :
-            right_speed = left_speed = linear
-        else :
-            left_speed = linear - angular * self.WHEEL_GAP / 2.0
-            right_speed = linear + angular * self.WHEEL_GAP / 2.0
+        # if angular == 0 and linear == 0:
+        #     self.motor_driver.motor1.throttle = 0
+        #     self.motor_driver.motor2.throttle = 0
+        #     self.motor_driver.motor3.throttle = 0
+        #     self.motor_driver.motor4.throttle = 0
+        #     return
+        # # rotation 
+        # elif linear == 0 :
+        #     right_speed = angular * self.WHEEL_GAP / 2.0
+        #     left_speed = -right_speed
+        # # forward or backward
+        # elif angular == 0 :
+        #     right_speed = left_speed = linear
+        # else :
+        left_speed = linear - angular * self.WHEEL_GAP / 2.0
+        right_speed = linear + angular * self.WHEEL_GAP / 2.0
 
         # prece = int(speed_percent / 255 * 100)
         # speed = int(min(max(abs(speed_percent * 255), 0), 255))
@@ -65,18 +69,36 @@ class VelocityCommand():
         right_speed_percent = float(min(max(abs(right_speed * 0.1), 0.6), 1.0))
         rospy.loginfo('FLE: {}, FRE: {}'.format(left_speed , right_speed))
 
-        self.motor_driver.motor1.throttle = -left_speed_percent if left_speed < 0 else left_speed_percent
-        self.motor_driver.motor2.throttle = -right_speed_percent if right_speed < 0 else right_speed_percent
-        self.motor_driver.motor3.throttle = -left_speed_percent if left_speed < 0 else left_speed_percent 
-        self.motor_driver.motor4.throttle = -right_speed_percent if right_speed < 0 else right_speed_percent 
-        rate.sleep()
+        self.left_speed= -left_speed_percent if left_speed < 0 else left_speed_percent
+        self.right_speed = -right_speed_percent if right_speed < 0 else right_speed_percent
+        # rate.sleep()
 
     def stopAll(self):
         self.motor_driver.motor1.throttle = 0
         self.motor_driver.motor2.throttle = 0
         self.motor_driver.motor3.throttle = 0
         self.motor_driver.motor4.throttle = 0 
+    
+    def set_speed(self):
+        self.motor_driver.motor1.throttle = 0
+        self.motor_driver.motor2.throttle = 0
+        self.motor_driver.motor3.throttle = 0
+        self.motor_driver.motor4.throttle = 0 
         
+    def run(self):
+        """The control loop of the driver."""
+        rate = rospy.Rate(self._rate)
+        while not rospy.is_shutdown():
+            # If we haven't received new commands for a while, we
+            # may have lost contact with the commander-- stop
+            # moving
+            delay = rospy.get_time() - self._last_received
+            if delay < self._timeout:
+                self.set_speed()
+            else:
+                self.stopAll()
+            rate.sleep()
+
     def start_listening(self):
             rospy.Subscriber('/cmd_vel', Twist, self.set_pwm)
             rospy.spin()
@@ -90,9 +112,10 @@ class VelocityCommand():
 
 if __name__ == '__main__':
     velocity_command = VelocityCommand()
+    velocity_command.start_listening
     try :
         # _thread.start_new_thread(velocity_command.set_pwm, ())
-        velocity_command.start_listening()
+        velocity_command.run()
     except rospy.ROSInterruptException:
         velocity_command.stopAll()
         pass
