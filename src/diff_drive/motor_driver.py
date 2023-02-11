@@ -100,13 +100,6 @@ class VelocityCommand():
 
 if __name__ == '__main__':
     velocity_command = VelocityCommand()
-    velocity_command.motor_driver.motor1.throttle = 1
-    velocity_command.motor_driver.motor2.throttle = 1
-    velocity_command.motor_driver.motor3.throttle = 1
-    velocity_command.motor_driver.motor4.throttle = 1
-    time.sleep(3)
-    velocity_command.stopAll()
-
     # velocity_command.start_listening()
     try :
         # _thread.start_new_thread(velocity_command.set_pwm, ())
