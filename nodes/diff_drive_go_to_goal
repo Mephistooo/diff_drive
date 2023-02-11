@@ -144,6 +144,7 @@ class GoToGoalNode:
         self.pose = self.get_angle_pose(newPose.pose.pose)
 
     def on_goal(self, goal):
+        rospy.loginfo('Goal requested')
         self.action_client.wait_for_server()
         action_goal = GoToPoseGoal()
         action_goal.pose.pose = goal.pose
@@ -167,4 +168,5 @@ if __name__ == '__main__':
         node = GoToGoalNode()
         node.main()
     except rospy.ROSInterruptException:
+        rospy.loginfo(traceback.format_exc())
         pass
