@@ -36,7 +36,6 @@ class VelocityCommand():
         """
         return (value - from_min) * (to_max - to_min) / (from_max - from_min) + to_min
 
-   
 
     def set_pwm(self, data: Twist): 
         rate = rospy.Rate(10)
@@ -73,7 +72,8 @@ class VelocityCommand():
         self.motor_driver.motor2.throttle = self.right_speed
         self.motor_driver.motor3.throttle = self.left_speed
         self.motor_driver.motor4.throttle = self.right_speed
-        rate.sleep()
+
+        return
 
     def stopAll(self):
         self.motor_driver.motor1.throttle = 0

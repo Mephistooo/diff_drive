@@ -49,7 +49,7 @@
     <param name="~angular_tolerance" value="0.04" />
     <param name="~forwardMovementOnly" value="false" />
     <remap from="cmd_vel" to="/robot/cmd_vel" />
-    <remap from="move_base_simple/goal" to="/diff_drive_go_to_goal/goal" />
+    <!-- <remap from="move_base_simple/goal" to="/diff_drive_go_to_goal/goal" /> -->
   </node>
  <node name="diff_imu_publisher" pkg="diff_drive"
         type="diff_imu_publisher" output="screen" respawn="true">
