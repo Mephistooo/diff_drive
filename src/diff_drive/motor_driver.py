@@ -101,15 +101,23 @@ class VelocityCommand():
         # self.motor_driver.motor4.throttle = self.right_speed
 
     def start_listening(self):
-            rospy.Subscriber('/cmd_vel', Twist, self.set_pwm)
-            rospy.spin()
+        rospy.Subscriber('/cmd_vel', Twist, self.set_pwm)
+        rospy.spin()
+        rate = rospy.Rate(self._rate)
+
+        while not rospy.is_shutdown():
+            delay = rospy.get_time() - self._last_received
+            if delay < self._timeout:
+                self.motor_driver.set_speed(self.left_speed, right_speed)
+            else:
+                self.motor_driver.Stop()
+            rate.sleep()
 
 if __name__ == '__main__':
     velocity_command = VelocityCommand()
     # velocity_command.start_listening()
     try :
         velocity_command.start_listening()
-        _thread.start_new_thread(velocity_command.run, ())
     except rospy.ROSInterruptException:
         velocity_command.stopAll()
         pass
