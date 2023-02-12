@@ -56,6 +56,7 @@ class VelocityCommand():
             while not rospy.is_shutdown():
                 delay = rospy.get_time() - self._last_received
                 if delay < self._timeout:
+                    rospy.loginfo('Setting Speed - FLE: {}, FRE: {}'.format(self.left_speed , self.right_speed))
                     self.motor_driver.set_speed(self.left_speed, right_speed)
                 else:
                     self.motor_driver.Stop()
