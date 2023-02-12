@@ -13,7 +13,7 @@ class MotorDriver():
     def __init__(self):
         self.motor_driver = MotorKit(i2c=board.I2C())
         atexit.register(self.stop)
-        
+
     def _format(speed, minimum, maximum):
         if speed < minimum:
             return minimum
@@ -67,7 +67,7 @@ class VelocityCommand():
         linear = data.linear.x
         angular = data.angular.z
         if angular == 0 and linear == 0:
-            self.left_speed= = 0
+            self.left_speed  = 0
             self.right_speed = 0
             return
         elif linear == 0 :
