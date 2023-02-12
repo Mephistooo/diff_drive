@@ -9,31 +9,6 @@ import board
 from adafruit_motorkit import MotorKit
 import atexit
 
-class MotorDriver():
-    def __init__(self):
-        self.motor_driver = MotorKit(i2c=board.I2C())
-        atexit.register(self.stop)
-
-    def _format(speed, minimum, maximum):
-        if speed < minimum:
-            return minimum
-        elif speed > maximum:
-            return maximum
-        return speed
-
-    def set_speed(self, left_speed: float, right_speed: float):
-        self.motor_driver.motor1.throttle = left_speed
-        self.motor_driver.motor2.throttle = right_speed
-        self.motor_driver.motor3.throttle = left_speed
-        self.motor_driver.motor4.throttle = right_speed
-
-    def stop(self):
-        self.motor_driver.motor1.throttle = 0
-        self.motor_driver.motor2.throttle = 0
-        self.motor_driver.motor3.throttle = 0
-        self.motor_driver.motor4.throttle = 0 
-
-
 class VelocityCommand():
 
     def __init__(self):
@@ -47,20 +22,32 @@ class VelocityCommand():
         self._last_received = rospy.get_time()
         self._timeout = rospy.get_param('~timeout', 2)
         self._rate = rospy.get_param('~rate', 10)
-        self.motor_driver = MotorDriver()
+        self.motor_driver = MotorKit(i2c=board.I2C())
+        atexit.register(self.stop)
+
+
+    def set_speed(self, left_speed: float, right_speed: float):
+        self.motor_driver.motor1.throttle = left_speed
+        self.motor_driver.motor2.throttle = right_speed
+        self.motor_driver.motor3.throttle = left_speed
+        self.motor_driver.motor4.throttle = right_speed
+
+    def stop(self):
+        self.motor_driver.motor1.throttle = 0
+        self.motor_driver.motor2.throttle = 0
+        self.motor_driver.motor3.throttle = 0
+        self.motor_driver.motor4.throttle = 0 
 
     def run(self):
             """driver loop"""
             rate = rospy.Rate(self._rate)
-
             while not rospy.is_shutdown():
                 delay = rospy.get_time() - self._last_received
                 if delay < self._timeout:
                     rospy.loginfo('Setting Speed - FLE: {}, FRE: {}'.format(self.left_speed , self.right_speed))
-                    self.motor_driver.set_speed(self.left_speed, right_speed)
+                    self.set_speed(self.left_speed, right_speed)
                 else:
-                    self.motor_driver.Stop()
-
+                    self.Stop()
                 rate.sleep()
 
     def set_pwm(self, data: Twist): 
@@ -105,13 +92,14 @@ class VelocityCommand():
         rospy.Subscriber('/cmd_vel', Twist, self.set_pwm)
         rospy.spin()
         rate = rospy.Rate(self._rate)
-
         while not rospy.is_shutdown():
+            rospy.loginfo('Controller loop')
             delay = rospy.get_time() - self._last_received
             if delay < self._timeout:
-                self.motor_driver.set_speed(self.left_speed, right_speed)
+                rospy.loginfo('setting speed')
+                self.set_speed(self.left_speed, right_speed)
             else:
-                self.motor_driver.Stop()
+                self.Stop()
             rate.sleep()
 
 if __name__ == '__main__':
