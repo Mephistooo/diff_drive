@@ -93,10 +93,8 @@ class VelocityCommand():
         # rospy.spin()
         rate = rospy.Rate(self._rate)
         while not rospy.is_shutdown():
-            rospy.loginfo('Controller loop')
             delay = rospy.get_time() - self._last_received
             if delay < self._timeout:
-                rospy.loginfo('setting speed')
                 self.set_speed(self.left_speed, self.right_speed)
             else:
                 self.stop()
