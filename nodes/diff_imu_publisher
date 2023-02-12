@@ -46,11 +46,16 @@ def imu_publisher():
         try: 
             rate.sleep()
             gyro_data = mpu.get_gyro_data()
-            if len(gyro_data) >1:  #received complete packet
+            accel_data = mpu.get_accel_data()
+            temp = mpu.get_temp()
+            if len(gyro_data) > 1 and len(accel_data) > 1:  #received complete packet
                 current_time = rospy.Time.now()
                 gyro_x = float(gyro_data['x'])
                 gyro_y = float(gyro_data['y'])
                 gyro_z = float(gyro_data['z'])
+                accel_x = float(accel_data['x'])
+                accel_y = float(accel_data['y'])
+                accel_z = float(accel_data['z'])
 
                 if count < num_callibration_itrs:
                     gyro_x_offset += gyro_x
@@ -90,7 +95,20 @@ def imu_publisher():
                     imu_msg.orientation_covariance = [1e6, 0, 0, 0, 1e6, 0, 0, 0, 1e-6] #[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0] #[1e6, 0, 0, 0, 1e6, 0, 0, 0, 1e-6]
                     imu_msg.angular_velocity_covariance[0] = -1
                     imu_msg.linear_acceleration_covariance[0] = -1
+                    # imu_pub.publish(imu_msg)
+
+                    imu_msg.linear_acceleration.x = accel_x*9.8
+                    imu_msg.linear_acceleration.y = accel_y*9.8
+                    imu_msg.linear_acceleration.z = accel_z*9.8
+
+                    imu_msg.angular_velocity.x = gyro_x*0.0174
+                    imu_msg.angular_velocity.y = gyro_y*0.0174
+                    imu_msg.angular_velocity.z = gyro_z*0.0174
+
+                    imu_msg.header.stamp = rospy.Time.now()
+
                     imu_pub.publish(imu_msg)
+
                 last_time = current_time
             else:
                 rospy.loginfo("received incomplete data from mpu6050")
