@@ -99,7 +99,7 @@ class VelocityCommand():
                 rospy.loginfo('setting speed')
                 self.set_speed(self.left_speed, self.right_speed)
             else:
-                self.Stop()
+                self.stop()
             rate.sleep()
 
 if __name__ == '__main__':
