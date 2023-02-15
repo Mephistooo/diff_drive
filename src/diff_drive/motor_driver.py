@@ -8,6 +8,7 @@ from geometry_msgs.msg import Twist
 import board
 from adafruit_motorkit import MotorKit
 import atexit
+from math import pi
 
 class VelocityCommand():
 
@@ -22,7 +23,10 @@ class VelocityCommand():
         self._last_received = rospy.get_time()
         self._timeout = rospy.get_param('~timeout', 2)
         self._rate = rospy.get_param('~rate', 10)
+        self.max_rpm  = 10
         self.motor_driver = MotorKit(i2c=board.I2C())
+        self.last_x = 0
+        self.last_z = 0
         atexit.register(self.stop)
 
 
@@ -52,8 +56,16 @@ class VelocityCommand():
 
     def set_pwm(self, data: Twist): 
         self._last_received = rospy.get_time()
+
         linear = data.linear.x
         angular = data.angular.z
+
+        if linear == self.last_x and angular == self.last_z:
+            return
+             
+        self.last_x = linear
+        self.last_z = angular
+
         if angular == 0 and linear == 0:
             self.left_speed  = 0
             self.right_speed = 0
@@ -69,7 +81,7 @@ class VelocityCommand():
 
         if left_speed < 0.1:
             left_speed = 0 
-        if right_speed < 0.01:
+        if right_speed < 0.1:
             right_speed = 0 
 
         # prece = int(speed_percent / 255 * 100)
@@ -77,8 +89,11 @@ class VelocityCommand():
 
         # _left_speed_percent = (0.01 * left_speed/1.0)
         #  _right_speed_percent = (0.01 * right_speed/1.0)
-        left_speed_percent = float(min(max(abs(left_speed * 0.1), 0.4), 1.0))
-        right_speed_percent = float(min(max(abs(right_speed * 0.1), 0.4), 1.0))
+        # convert velocities to [-1,1]
+        max_speed = (self.max_rpm / 60.0) * 2.0 * pi * (self.WHEEL_RADIUS * 0.5)
+
+        left_speed_percent = float(min(max(abs(left_speed * 0.1), 0.4), max_speed))
+        right_speed_percent = float(min(max(abs(right_speed * 0.1), 0.4), max_speed))
         rospy.loginfo('FLE: {}, FRE: {}'.format(left_speed , right_speed))
 
         self.left_speed= -left_speed_percent if left_speed < 0 else left_speed_percent
