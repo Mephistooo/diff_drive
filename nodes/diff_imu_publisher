@@ -72,9 +72,9 @@ def imu_publisher():
 
                 #publish ros Imu message
                 else:
-                    gyro_x -= gyro_x_offset
-                    gyro_y -= gyro_y_offset
-                    gyro_z -= gyro_z_offset
+                    gyro_x -= gyro_x_offset *0.0174
+                    gyro_y -= gyro_y_offset *0.0174
+                    gyro_z -= gyro_z_offset *0.0174
                     if debug:
                         rospy.loginfo('x %s y %s z %s', gyro_x, gyro_y, gyro_z)
                     gyro_msg = Vector3()
