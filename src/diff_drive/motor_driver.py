@@ -98,8 +98,8 @@ class VelocityCommand():
         # # left_speed_percent = float(min(max(left_speed * 0.1), -0.4), 1)
         # # right_speed_percent = float(min(max(right_speed * 0.1),-0.4), 1)
         # rospy.loginfo('FLE: {}, FRE: {}'.format(left_speed , right_speed))
-        # linear_vel = data.linear.x
-        # angular_vel = data.angular.z
+        linear_vel = data.linear.x
+        angular_vel = data.angular.z
      
             # Calculate speeds for left and right motors
         left_speed = linear_vel - angular_vel * 10
