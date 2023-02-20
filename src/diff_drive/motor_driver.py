@@ -68,25 +68,25 @@ class VelocityCommand():
         self.last_x = linear
         self.last_z = angular
 
-        if angular == 0 and linear == 0:
-            self.left_speed  = 0
-            self.right_speed = 0
-            return
-        elif linear == 0 :
-            right_speed = angular * self.WHEEL_GAP / 2.0
-            left_speed = -right_speed
-        elif abs(angular) < 3/180*pi :
-            right_speed = left_speed = linear
-        else :
-            left_speed = linear - angular * self.WHEEL_GAP / 2.0
-            right_speed = linear + angular * self.WHEEL_GAP / 2.0
+        # if angular == 0 and linear == 0:
+        #     self.left_speed  = 0
+        #     self.right_speed = 0
+        #     return
+        # elif linear == 0 :
+        #     right_speed = angular * self.WHEEL_GAP / 2.0
+        #     left_speed = -right_speed
+        # elif abs(angular) < 3/180*pi :
+        #     right_speed = left_speed = linear
+        # else :
+        #     left_speed = linear - angular * self.WHEEL_GAP / 2.0
+        #     right_speed = linear + angular * self.WHEEL_GAP / 2.0
 
         # if left_speed != 0:
         #     left_speed *= 
         # if right_speed < 0.1:
         #     right_speed = 0 
-        left_speed*= 100
-        right_speed*= 100
+        # left_speed*= 100
+        # right_speed*= 100
         # # prece = int(speed_percent / 255 * 100)
         # # speed = int(min(max(abs(speed_percent * 255), 0), 255))
 
@@ -101,9 +101,9 @@ class VelocityCommand():
         # linear_vel = data.linear.x
         # angular_vel = data.angular.z
      
-        #     # Calculate speeds for left and right motors
-        # left_speed = linear_vel - angular_vel * 10
-        # right_speed = linear_vel + angular_vel * 10
+            # Calculate speeds for left and right motors
+        left_speed = linear_vel - angular_vel * 10
+        right_speed = linear_vel + angular_vel * 10
     
         # # Clip speeds to be within -1 and 1
         self.left_speed = max(min(left_speed, 1), -1)
