@@ -84,8 +84,8 @@ class VelocityCommand():
         #     left_speed *= 
         # if right_speed < 0.1:
         #     right_speed = 0 
-        left_speed*= 5
-        right_speed*= 5
+        left_speed*= 10
+        right_speed*= 10
         # # prece = int(speed_percent / 255 * 100)
         # # speed = int(min(max(abs(speed_percent * 255), 0), 255))
 
@@ -125,7 +125,7 @@ class VelocityCommand():
                 self.set_speed(self.left_speed, self.right_speed)
             else:
                 self.stop()
-            rate.sleep()
+            #rate.sleep()
 
 if __name__ == '__main__':
     velocity_command = VelocityCommand()
