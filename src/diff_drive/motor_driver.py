@@ -21,13 +21,14 @@ class VelocityCommand():
         self.left_speed = 0
         self.right_speed = 0 
         self._last_received = rospy.get_time()
-        self._timeout = rospy.get_param('~timeout', 2)
+        self._timeout = rospy.get_param('~timeout', 3)
         self._rate = rospy.get_param('~rate', 10)
         self.max_rpm  = 10
         self.motor_driver = MotorKit(i2c=board.I2C())
         self.last_x = 0
         self.last_z = 0
         atexit.register(self.stop)
+        
 
 
     def set_speed(self, left_speed: float, right_speed: float):
@@ -74,7 +75,7 @@ class VelocityCommand():
         elif linear == 0 :
             right_speed = angular * self.WHEEL_GAP / 2.0
             left_speed = -right_speed
-        elif angular == 0 :
+        elif abs(angular) < 3/180*pi :
             right_speed = left_speed = linear
         else :
             left_speed = linear - angular * self.WHEEL_GAP / 2.0
@@ -84,8 +85,8 @@ class VelocityCommand():
         #     left_speed *= 
         # if right_speed < 0.1:
         #     right_speed = 0 
-        left_speed*= 10
-        right_speed*= 10
+        left_speed*= 100
+        right_speed*= 100
         # # prece = int(speed_percent / 255 * 100)
         # # speed = int(min(max(abs(speed_percent * 255), 0), 255))
 
@@ -117,7 +118,7 @@ class VelocityCommand():
 
     def start_listening(self):
         rospy.Subscriber('/cmd_vel', Twist, self.set_pwm)
-        rospy.spin()
+        # rospy.spin()
         rate = rospy.Rate(self._rate)
         while not rospy.is_shutdown():
             delay = rospy.get_time() - self._last_received
