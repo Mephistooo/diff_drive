@@ -102,8 +102,8 @@ class VelocityCommand():
             left_speed = right_speed = linear
         else:   
             # Calculate speeds for left and right motors
-            left_speed = linear_vel - angular_vel * 2
-            right_speed = linear_vel + angular_vel * 2
+            left_speed = linear_vel - angular_vel * 6
+            right_speed = linear_vel + angular_vel * 6
     
         # Clip speeds to be within -1 and 1
         self.left_speed = max(min(left_speed, 1), -1)
