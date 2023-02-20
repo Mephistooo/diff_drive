@@ -125,6 +125,7 @@ class VelocityCommand():
             if delay < self._timeout:
                 self.set_speed(self.left_speed, self.right_speed)
             else:
+                rospy.loginfo('timeout')
                 self.stop()
             # rate.sleep()
 
