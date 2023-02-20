@@ -80,11 +80,12 @@ class VelocityCommand():
             left_speed = linear - angular * self.WHEEL_GAP / 2.0
             right_speed = linear + angular * self.WHEEL_GAP / 2.0
 
-        # if left_speed < 0.1:
-        #     left_speed = 0 
+        # if left_speed != 0:
+        #     left_speed *= 
         # if right_speed < 0.1:
         #     right_speed = 0 
-
+        left_speed*= (1+self.min)
+        right_speed*=(1+self.min)
         # # prece = int(speed_percent / 255 * 100)
         # # speed = int(min(max(abs(speed_percent * 255), 0), 255))
 
