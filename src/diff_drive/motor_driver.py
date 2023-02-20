@@ -117,7 +117,7 @@ class VelocityCommand():
 
     def start_listening(self):
         rospy.Subscriber('/cmd_vel', Twist, self.set_pwm)
-        # rospy.spin()
+        rospy.spin()
         rate = rospy.Rate(self._rate)
         while not rospy.is_shutdown():
             delay = rospy.get_time() - self._last_received
