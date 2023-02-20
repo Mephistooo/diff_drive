@@ -21,7 +21,7 @@ class VelocityCommand():
         self.left_speed = 0
         self.right_speed = 0 
         self._last_received = rospy.get_time()
-        self._timeout = rospy.get_param('~timeout', 10)
+        self._timeout = rospy.get_param('~timeout', 2)
         self._rate = rospy.get_param('~rate', 10)
         self.max_rpm  = 10
         self.motor_driver = MotorKit(i2c=board.I2C())
@@ -127,7 +127,7 @@ class VelocityCommand():
             else:
                 rospy.loginfo('timeout')
                 self.stop()
-            # rate.sleep()
+            rate.sleep()
 
 if __name__ == '__main__':
     velocity_command = VelocityCommand()
