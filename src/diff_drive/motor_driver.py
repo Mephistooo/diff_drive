@@ -67,38 +67,48 @@ class VelocityCommand():
         self.last_x = linear
         self.last_z = angular
 
-        if angular == 0 and linear == 0:
-            self.left_speed  = 0
-            self.right_speed = 0
-            return
-        elif linear == 0 :
-            right_speed = angular * self.WHEEL_GAP / 2.0
-            left_speed = -right_speed
-        elif angular == 0 :
-            right_speed = left_speed = linear
-        else :
-            left_speed = linear - angular * self.WHEEL_GAP / 2.0
-            right_speed = linear + angular * self.WHEEL_GAP / 2.0
+        # if angular == 0 and linear == 0:
+        #     self.left_speed  = 0
+        #     self.right_speed = 0
+        #     return
+        # elif linear == 0 :
+        #     right_speed = angular * self.WHEEL_GAP / 2.0
+        #     left_speed = -right_speed
+        # elif angular == 0 :
+        #     right_speed = left_speed = linear
+        # else :
+        #     left_speed = linear - angular * self.WHEEL_GAP / 2.0
+        #     right_speed = linear + angular * self.WHEEL_GAP / 2.0
 
-        # if left_speed < 0.1:
-        #     left_speed = 0 
-        # if right_speed < 0.1:
-        #     right_speed = 0 
+        # # if left_speed < 0.1:
+        # #     left_speed = 0 
+        # # if right_speed < 0.1:
+        # #     right_speed = 0 
 
-        # prece = int(speed_percent / 255 * 100)
-        # speed = int(min(max(abs(speed_percent * 255), 0), 255))
+        # # prece = int(speed_percent / 255 * 100)
+        # # speed = int(min(max(abs(speed_percent * 255), 0), 255))
 
-        left_speed_percent = (0.1 * left_speed/1.0)
-        right_speed_percent = (0.1 * right_speed/1.0)
-        # convert velocities to [-1,1]
-        max_speed = (self.max_rpm / 60.0) * 2.0 * pi * (self.WHEEL_RADIUS * 0.5)
+        # left_speed_percent = (0.1 * left_speed/1.0)
+        # right_speed_percent = (0.1 * right_speed/1.0)
+        # # convert velocities to [-1,1]
+        # max_speed = (self.max_rpm / 60.0) * 2.0 * pi * (self.WHEEL_RADIUS * 0.5)
 
-        # left_speed_percent = float(min(max(left_speed * 0.1), -0.4), 1)
-        # right_speed_percent = float(min(max(right_speed * 0.1),-0.4), 1)
-        rospy.loginfo('FLE: {}, FRE: {}'.format(left_speed , right_speed))
-
-        self.left_speed= -left_speed_percent if left_speed < 0 else left_speed_percent
-        self.right_speed = -right_speed_percent if right_speed < 0 else right_speed_percent
+        # # left_speed_percent = float(min(max(left_speed * 0.1), -0.4), 1)
+        # # right_speed_percent = float(min(max(right_speed * 0.1),-0.4), 1)
+        # rospy.loginfo('FLE: {}, FRE: {}'.format(left_speed , right_speed))
+        linear_vel = data.linear.x
+        angular_vel = data.angular.z
+    
+        # Calculate speeds for left and right motors
+        left_speed = linear_vel - angular_vel 
+        right_speed = linear_vel + angular_vel
+    
+        # Clip speeds to be within -1 and 1
+        self.left_speed = max(min(left_speed, 1), -1)
+        self.right_speed = max(min(right_speed, 1), -1)
+    
+        # self.left_speed= -left_speed_percent if left_speed < 0 else left_speed_percent
+        # self.right_speed = -right_speed_percent if right_speed < 0 else right_speed_percent
         # self.motor_driver.motor1.throttle = self.left_speed
         # self.motor_driver.motor2.throttle = self.right_speed
         # self.motor_driver.motor3.throttle = self.left_speed
