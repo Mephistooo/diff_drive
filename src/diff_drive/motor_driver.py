@@ -124,7 +124,7 @@ class VelocityCommand():
                 self.set_speed(self.left_speed, self.right_speed)
             else:
                 self.stop()
-            # rate.sleep()
+            rate.sleep()
 
 if __name__ == '__main__':
     velocity_command = VelocityCommand()
