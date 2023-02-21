@@ -30,11 +30,10 @@ class Wheel():
         rate = rospy.Rate(10)
         rospy.loginfo("waiting for Encoders...")
         while not rospy.is_shutdown():
-        # Pausing for `tsample` to give CPU time to process encoder signal
-            time.sleep(0.0002)
+            time.sleep(0.002)
             # rospy.loginfo("L E {} R E {}".format(left_wheel_encoder.read(), right_wheel_encoder.read()))
-            self.left_wheel_pub.publish(Int32(int(360 / 340 * self.left_wheel_encoder.steps)))
-            self.right_wheel_pub.publish(Int32(int(360 / 340 * self.right_wheel_encoder.steps)))
+            self.left_wheel_pub.publish(Int32(self.left_wheel_encoder.steps))  #int(360 / 340 * self.left_wheel_encoder.steps)))
+            self.right_wheel_pub.publish(Int32(self.right_wheel_encoder.steps)) #int(360 / 340 * self.right_wheel_encoder.steps)))
             # rate.sleep()
 
     def close(self):
