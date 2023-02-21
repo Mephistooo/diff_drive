@@ -18,7 +18,7 @@ MPM = 1.7
 
 class Wheel():
     def __init__(self) -> None:
-        self.left_wheel_encoder = RotaryEncoder(5, 6, max_steps=1e3)
+        self.left_wheel_encoder = RotaryEncoder(6, 5, max_steps=1e3)
         self.right_wheel_encoder = RotaryEncoder(16, 19, max_steps=1e3)
         atexit.register(self.close)
         self.left_wheel_pub = rospy.Publisher('lwheel_ticks', Int32, queue_size=10)
