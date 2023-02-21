@@ -32,8 +32,8 @@ class Wheel():
         # Pausing for `tsample` to give CPU time to process encoder signal
             time.sleep(0.002)
             # rospy.loginfo("L E {} R E {}".format(left_wheel_encoder.read(), right_wheel_encoder.read()))
-            left_wheel_pub.publish(Int32(int(360 / PPR * self.left_wheel_encoder.steps)))
-            right_wheel_pub.publish(Int32(int(360 / PPR * self.right_wheel_encoder.steps)))
+            left_wheel_pub.publish(Int32(int(360 / 340 * self.left_wheel_encoder.steps)))
+            right_wheel_pub.publish(Int32(int(360 / 340 * self.right_wheel_encoder.steps)))
 
     def close(self):
         self.left_wheel_encoder.close()
