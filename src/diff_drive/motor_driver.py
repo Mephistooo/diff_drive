@@ -33,7 +33,6 @@ class VelocityCommand():
 
 
     def set_speed(self, left_speed: float, right_speed: float):
-        rospy.loginfo('seeting speed to {}, {}'.format(left_speed, right_speed))
         self.motor_driver.motor1.throttle = left_speed
         self.motor_driver.motor2.throttle = right_speed
         self.motor_driver.motor3.throttle = left_speed
@@ -126,7 +125,6 @@ class VelocityCommand():
             if delay < self._timeout:
                 self.set_speed(self.left_speed, self.right_speed)
             else:
-                rospy.loginfo('TIMEOUT')
                 self.stop()
             # rate.sleep()
 
