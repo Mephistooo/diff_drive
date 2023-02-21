@@ -7,7 +7,7 @@ from std_msgs.msg import Int32
 from math import sqrt,atan2,cos,sin,pi
 import time
 from  Encoder import Encoder as _encoder
-
+import atexit
 from gpiozero import RotaryEncoder
 
 PPM = 13610
@@ -16,23 +16,31 @@ PPR = 1361
 
 MPM = 1.7
 
-def wheel_encoder_publisher():
-    left_wheel_encoder = RotaryEncoder(5, 6)
-    right_wheel_encoder = RotaryEncoder(19, 16)
-    # rate = rospy.Rate(pub_freq)
-    left_wheel_pub = rospy.Publisher('lwheel_ticks', Int32, queue_size=50)
-    right_wheel_pub = rospy.Publisher('rwheel_ticks', Int32, queue_size=50)
-    rospy.init_node('wheel_encoder_publisher', anonymous=True)
-    rospy.loginfo("waiting for Encoders...")
-    while not rospy.is_shutdown():
-    # Pausing for `tsample` to give CPU time to process encoder signal
-        time.sleep(0.002)
-        # rospy.loginfo("L E {} R E {}".format(left_wheel_encoder.read(), right_wheel_encoder.read()))
-        left_wheel_pub.publish(Int32(360 / PPR * left_wheel_encoder.steps))
-        right_wheel_pub.publish(Int32(360 / PPR * right_wheel_encoder.steps))
+class Wheel():
+    def __init__(self) -> None:
+        self.left_wheel_encoder = RotaryEncoder(5, 6)
+        self.right_wheel_encoder = RotaryEncoder(19, 16)
+        atexit.register(self.close())
+        
+    def wheel_encoder_publisher(self):
+        # rate = rospy.Rate(pub_freq)
+        left_wheel_pub = rospy.Publisher('lwheel_ticks', Int32, queue_size=50)
+        right_wheel_pub = rospy.Publisher('rwheel_ticks', Int32, queue_size=50)
+        rospy.init_node('wheel_encoder_publisher', anonymous=True)
+        rospy.loginfo("waiting for Encoders...")
+        while not rospy.is_shutdown():
+        # Pausing for `tsample` to give CPU time to process encoder signal
+            time.sleep(0.002)
+            # rospy.loginfo("L E {} R E {}".format(left_wheel_encoder.read(), right_wheel_encoder.read()))
+            left_wheel_pub.publish(Int32(360 / PPR * self.left_wheel_encoder.steps))
+            right_wheel_pub.publish(Int32(360 / PPR * self.right_wheel_encoder.steps))
 
+    def close(self):
+        self.left_wheel_encoder.close()
+        self.right_wheel_encoder.close()
+       
 if __name__ == '__main__':
     try:
-        wheel_encoder_publisher()
+        Wheel.wheel_encoder_publisher()
     except rospy.ROSInterruptException:
         pass
