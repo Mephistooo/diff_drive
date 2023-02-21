@@ -33,7 +33,7 @@ class VelocityCommand():
 
 
     def set_speed(self, left_speed: float, right_speed: float):
-        rospy.loginfo('seeting speed to {}, {}'.format(left_speed, right_speed))
+        # rospy.loginfo('seeting speed to {}, {}'.format(left_speed, right_speed))
         self.motor_driver.motor1.throttle = left_speed
         self.motor_driver.motor2.throttle = right_speed
         self.motor_driver.motor3.throttle = left_speed
@@ -52,10 +52,10 @@ class VelocityCommand():
                 delay = rospy.get_time() - self._last_received
                 if delay < self._timeout:
                     rospy.loginfo('Setting Speed - FLE: {}, FRE: {}'.format(self.left_speed , self.right_speed))
-                    self.set_speed(self.left_speed, right_speed)
+                    self.set_speed(self.left_speed,self.right_speed)
                 else:
                     self.Stop()
-                rate.sleep()
+                #rate.sleep()
 
     def set_pwm(self, data: Twist): 
         self._last_received = rospy.get_time()
@@ -118,7 +118,7 @@ class VelocityCommand():
         # self.motor_driver.motor4.throttle = self.right_speed
 
     def start_listening(self):
-        rospy.Subscriber('/robot/cmd_vel', Twist, self.set_pwm)
+        rospy.Subscriber('/cmd_vel', Twist, self.set_pwm)
         # rospy.spin()
         rate = rospy.Rate(self._rate)
         while not rospy.is_shutdown():
@@ -126,9 +126,9 @@ class VelocityCommand():
             if delay < self._timeout:
                 self.set_speed(self.left_speed, self.right_speed)
             else:
-                rospy.loginfo('timeout')
+                # rospy.loginfo('timeout')
                 self.stop()
-            rate.sleep()
+            # rate.sleep()
 
 if __name__ == '__main__':
     velocity_command = VelocityCommand()
