@@ -18,8 +18,8 @@ MPM = 1.7
 
 class Wheel():
     def __init__(self) -> None:
-        self.left_wheel_encoder = _encoder(5, 6)
-        self.right_wheel_encoder = _encoder(19, 16)
+        self.left_wheel_encoder = RotaryEncoder(5, 6, max_step=1e3)
+        self.right_wheel_encoder = RotaryEncoder(16, 19, max_step=1e3)
         atexit.register(self.close)
         self.left_wheel_pub = rospy.Publisher('lwheel_ticks', Int32, queue_size=10)
         self.right_wheel_pub = rospy.Publisher('rwheel_ticks', Int32, queue_size=10)
@@ -32,8 +32,8 @@ class Wheel():
         while not rospy.is_shutdown():
             time.sleep(0.002)
             # rospy.loginfo("L E {} R E {}".format(left_wheel_encoder.read(), right_wheel_encoder.read()))
-            self.left_wheel_pub.publish(Int32(self.left_wheel_encoder.read()))  #int(360 / 340 * self.left_wheel_encoder.steps)))
-            self.right_wheel_pub.publish(Int32(self.right_wheel_encoder.read())) #int(360 / 340 * self.right_wheel_encoder.steps)))
+            self.left_wheel_pub.publish(Int32(self.left_wheel_encoder.steps))  #int(360 / 340 * self.left_wheel_encoder.steps)))
+            self.right_wheel_pub.publish(Int32(self.right_wheel_encoder.steps)) #int(360 / 340 * self.right_wheel_encoder.steps)))
             # rate.sleep()
 
     def close(self):
