@@ -20,7 +20,7 @@ class Wheel():
     def __init__(self) -> None:
         self.left_wheel_encoder = RotaryEncoder(5, 6)
         self.right_wheel_encoder = RotaryEncoder(19, 16)
-        atexit.register(self.close())
+        atexit.register(self.close)
 
     def wheel_encoder_publisher(self):
         # rate = rospy.Rate(pub_freq)
