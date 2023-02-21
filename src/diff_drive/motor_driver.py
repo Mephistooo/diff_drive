@@ -27,6 +27,7 @@ class VelocityCommand():
         self.motor_driver = MotorKit(i2c=board.I2C())
         self.last_x = 0
         self.last_z = 0
+        # self.linear_thershold = 0.4
         atexit.register(self.stop)
         
 
