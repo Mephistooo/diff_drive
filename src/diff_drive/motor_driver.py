@@ -63,8 +63,8 @@ class VelocityCommand():
         linear = data.linear.x
         angular = data.angular.z
 
-        # if linear == self.last_x and angular == self.last_z:
-        #     return
+        if linear == self.last_x and angular == self.last_z:
+            return
              
         self.last_x = linear
         self.last_z = angular
@@ -118,7 +118,7 @@ class VelocityCommand():
         # self.motor_driver.motor4.throttle = self.right_speed
 
     def start_listening(self):
-        rospy.Subscriber('/robot/cmd_vel', Twist, self.set_pwm)
+        rospy.Subscriber('/cmd_vel', Twist, self.set_pwm)
         # rospy.spin()
         rate = rospy.Rate(self._rate)
         while not rospy.is_shutdown():
