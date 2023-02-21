@@ -8,6 +8,8 @@ from math import sqrt,atan2,cos,sin,pi
 import time
 from  Encoder import Encoder as _encoder
 
+from gpiozero import RotaryEncoder
+
 PPM = 13610
 
 PPR = 1361
@@ -15,8 +17,8 @@ PPR = 1361
 MPM = 1.7
 
 def wheel_encoder_publisher():
-    left_wheel_encoder = _encoder(5, 6)
-    right_wheel_encoder = _encoder(19, 16)
+    left_wheel_encoder = RotaryEncoder(5, 6)
+    right_wheel_encoder = RotaryEncoder(19, 16)
     # rate = rospy.Rate(pub_freq)
     left_wheel_pub = rospy.Publisher('lwheel_ticks', Int32, queue_size=50)
     right_wheel_pub = rospy.Publisher('rwheel_ticks', Int32, queue_size=50)
@@ -26,8 +28,8 @@ def wheel_encoder_publisher():
     # Pausing for `tsample` to give CPU time to process encoder signal
         time.sleep(0.002)
         # rospy.loginfo("L E {} R E {}".format(left_wheel_encoder.read(), right_wheel_encoder.read()))
-        left_wheel_pub.publish(Int32(left_wheel_encoder.read()))
-        right_wheel_pub.publish(Int32(right_wheel_encoder.read()))
+        left_wheel_pub.publish(Int32(360 / PPR * left_wheel_encoder.steps))
+        right_wheel_pub.publish(Int32(360 / PPR * right_wheel_encoder.steps))
 
 if __name__ == '__main__':
     try:
