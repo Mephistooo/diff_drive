@@ -17,14 +17,14 @@ MPM = 1.7
 def wheel_encoder_publisher():
     left_wheel_encoder = _encoder(5, 6)
     right_wheel_encoder = _encoder(19, 16)
-    rate = rospy.Rate(10)
+    # rate = rospy.Rate(pub_freq)
     left_wheel_pub = rospy.Publisher('lwheel_ticks', Int32, queue_size=50)
     right_wheel_pub = rospy.Publisher('rwheel_ticks', Int32, queue_size=50)
     rospy.init_node('wheel_encoder_publisher', anonymous=True)
     rospy.loginfo("waiting for Encoders...")
     while not rospy.is_shutdown():
     # Pausing for `tsample` to give CPU time to process encoder signal
-        rate.sleep()
+        time.sleep(0.002)
         # rospy.loginfo("L E {} R E {}".format(left_wheel_encoder.read(), right_wheel_encoder.read()))
         left_wheel_pub.publish(Int32(left_wheel_encoder.read()))
         right_wheel_pub.publish(Int32(right_wheel_encoder.read()))
