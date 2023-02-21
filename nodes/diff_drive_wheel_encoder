@@ -6,7 +6,7 @@ import tf
 from std_msgs.msg import Int32
 from math import sqrt,atan2,cos,sin,pi
 import time
-from  Encoder import Encoder as _encoder
+# from  Encoder import Encoder as _encoder
 import atexit
 from gpiozero import RotaryEncoder
 
@@ -18,8 +18,8 @@ MPM = 1.7
 
 class Wheel():
     def __init__(self) -> None:
-        self.left_wheel_encoder = RotaryEncoder(5, 6)
-        self.right_wheel_encoder = RotaryEncoder(19, 16)
+        self.left_wheel_encoder = RotaryEncoder(6, 5)
+        self.right_wheel_encoder = RotaryEncoder(16, 19)
         atexit.register(self.close)
         self.left_wheel_pub = rospy.Publisher('lwheel_ticks', Int32, queue_size=10)
         self.right_wheel_pub = rospy.Publisher('rwheel_ticks', Int32, queue_size=10)
