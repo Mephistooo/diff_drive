@@ -21,7 +21,7 @@ class Wheel():
         self.left_wheel_encoder = RotaryEncoder(5, 6)
         self.right_wheel_encoder = RotaryEncoder(19, 16)
         atexit.register(self.close())
-        
+
     def wheel_encoder_publisher(self):
         # rate = rospy.Rate(pub_freq)
         left_wheel_pub = rospy.Publisher('lwheel_ticks', Int32, queue_size=50)
@@ -40,7 +40,8 @@ class Wheel():
         self.right_wheel_encoder.close()
        
 if __name__ == '__main__':
+    wheels = Wheel()
     try:
-        Wheel.wheel_encoder_publisher()
+        wheels.wheel_encoder_publisher()
     except rospy.ROSInterruptException:
         pass
