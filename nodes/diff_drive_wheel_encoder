@@ -19,7 +19,7 @@ MPM = 1.7
 class Wheel():
     def __init__(self) -> None:
         self.left_wheel_encoder = _encoder(5, 6)
-        self.right_wheel_encoder = _encoder(16, 19)
+        self.right_wheel_encoder = _encoder(19, 16)
         atexit.register(self.close)
         self.left_wheel_pub = rospy.Publisher('lwheel_ticks', Int32, queue_size=10)
         self.right_wheel_pub = rospy.Publisher('rwheel_ticks', Int32, queue_size=10)
