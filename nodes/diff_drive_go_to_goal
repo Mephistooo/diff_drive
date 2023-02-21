@@ -32,7 +32,7 @@ class GoToGoalNode:
 
         self.dist_pub = rospy.Publisher('~distance_to_goal',
                                         Float32, queue_size=10)
-        self.twist_pub = rospy.Publisher('cmd_vel',
+        self.twist_pub = rospy.Publisher('/robot/cmd_vel',
                                          Twist, queue_size=10)
 
         self.node_name = rospy.get_name()
