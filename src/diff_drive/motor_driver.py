@@ -106,7 +106,7 @@ class VelocityCommand():
         right_speed = linear_vel + angular_vel
         if abs(left_speed) < 0.4 :
             left_speed = 0
-        if abs(right_speed() < 0.4:
+        if abs(right_speed) < 0.4:
             right_speed = 0
         # # # Clip speeds to be within -1 and 1
         self.left_speed = max(min(left_speed, 1), -1)
