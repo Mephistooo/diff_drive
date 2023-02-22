@@ -102,8 +102,8 @@ class VelocityCommand():
         angular_vel = data.angular.z
      
             # Calculate speeds for left and right motors
-        left_speed = linear_vel - angular_vel 
-        right_speed = linear_vel + angular_vel
+        left_speed = linear_vel - angular_vel + 0.4
+        right_speed = linear_vel + angular_vel + 0.4
         if abs(left_speed) < 0.4 :
             left_speed = 0
         if abs(right_speed) < 0.4:
