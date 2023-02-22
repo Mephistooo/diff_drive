@@ -100,13 +100,12 @@ class VelocityCommand():
         # rospy.loginfo('FLE: {}, FRE: {}'.format(left_speed , right_speed))
         linear_vel = data.linear.x
         angular_vel = data.angular.z
-     
             # Calculate speeds for left and right motors
-        left_speed = linear_vel - angular_vel + 0.4
-        right_speed = linear_vel + angular_vel + 0.4
-        if abs(left_speed) < 0.4 :
+        left_speed = linear_vel - angular_vel + 0.5
+        right_speed = linear_vel + angular_vel + 0.5
+        if abs(left_speed) <= 0.6 :
             left_speed = 0
-        if abs(right_speed) < 0.4:
+        if abs(right_speed) < 0.6:
             right_speed = 0
 
         # if abs(angular) < 0.3:
