@@ -14,13 +14,13 @@
     <remap from="cmd_vel" to="/robot/cmd_vel" />
   </node>
   
-  <node name="odom_publisher" pkg="diff_drive" type="diff_drive_odometry"
+  <!-- <node name="odom_publisher" pkg="diff_drive" type="diff_drive_odometry"
         output="screen">
     <rosparam subst_value="true">
       ticks_per_meter: 13610
       wheel_separation: 0.18
     </rosparam>
-  </node>
+  </node> -->
 
    <node name="motor_driver" pkg="diff_drive" type="motor_driver.py"
         output="screen">
