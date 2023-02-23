@@ -21,7 +21,7 @@ class VelocityCommand():
         self.left_speed = 0
         self.right_speed = 0 
         self._last_received = rospy.get_time()
-        self._timeout = rospy.get_param('~timeout', 3)
+        self._timeout = rospy.get_param('~timeout', 10)
         self._rate = rospy.get_param('~rate', 10)
         self.max_rpm  = 10
         self.motor_driver = MotorKit(i2c=board.I2C())
@@ -73,13 +73,13 @@ class VelocityCommand():
             self.right_speed = 0
             return
         elif linear == 0 :
-            right_speed = angular * self.WHEEL_GAP / 2.0
+            right_speed = angular * self.WHEEL_GAP / 2.0 + 0.4
             left_speed = -right_speed
         elif abs(angular) < 3/180*pi :
             right_speed = left_speed = linear
         else :
-            left_speed = linear - angular * self.WHEEL_GAP / 2.0
-            right_speed = linear + angular * self.WHEEL_GAP / 2.0
+            left_speed = linear - angular * self.WHEEL_GAP / 2.0 + 0.4
+            right_speed = linear + angular * self.WHEEL_GAP / 2.0 + 0.4
 
         # if left_speed != 0:
         #     left_speed = 0 
