@@ -68,18 +68,18 @@ class VelocityCommand():
         # self.last_x = linear
         # self.last_z = angular
 
-        if angular == 0 and linear == 0:
-            self.left_speed  = 0
-            self.right_speed = 0
-            return
-        elif linear == 0 :
-            right_speed = angular * self.WHEEL_GAP / 2.0 + 0.4
-            left_speed = -right_speed
-        elif abs(angular) < 3/180*pi :
-            right_speed = left_speed = linear
-        else :
-            left_speed = linear - angular * self.WHEEL_GAP / 2.0 + 0.4
-            right_speed = linear + angular * self.WHEEL_GAP / 2.0 + 0.4
+        # if angular == 0 and linear == 0:
+        #     self.left_speed  = 0
+        #     self.right_speed = 0
+        #     return
+        # elif linear == 0 :
+        #     right_speed = angular * self.WHEEL_GAP / 2.0 + 0.4
+        #     left_speed = -right_speed
+        # elif abs(angular) < 3/180*pi :
+        #     right_speed = left_speed = linear
+        # else :
+        #     left_speed = linear - angular * self.WHEEL_GAP / 2.0 + 0.4
+        #     right_speed = linear + angular * self.WHEEL_GAP / 2.0 + 0.4
 
         # if left_speed != 0:
         #     left_speed = 0 
@@ -98,11 +98,11 @@ class VelocityCommand():
         # # left_speed_percent = float(min(max(left_speed * 0.1), -0.4), 1)
         # # right_speed_percent = float(min(max(right_speed * 0.1),-0.4), 1)
         # rospy.loginfo('FLE: {}, FRE: {}'.format(left_speed , right_speed))
-        # linear_vel = data.linear.x
-        # angular_vel = data.angular.z
-        # #     # Calculate speeds for left and right motors
-        # left_speed = linear_vel - angular_vel 
-        # right_speed = linear_vel + angular_vel 
+        linear_vel = data.linear.x
+        angular_vel = data.angular.z
+        #     # Calculate speeds for left and right motors
+        left_speed = linear_vel - angular_vel 
+        right_speed = linear_vel + angular_vel 
 
         # if abs(left_speed) <= 0.5 :
         #     left_speed = 0
