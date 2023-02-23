@@ -62,8 +62,8 @@ class VelocityCommand():
         linear = data.linear.x
         angular = data.angular.z
 
-        if linear == self.last_x and angular == self.last_z:
-            return
+        # if linear == self.last_x and angular == self.last_z:
+        #     return
              
         self.last_x = linear
         self.last_z = angular
