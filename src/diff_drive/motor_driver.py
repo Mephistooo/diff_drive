@@ -75,8 +75,8 @@ class VelocityCommand():
         elif linear == 0 :
             right_speed = angular * self.WHEEL_GAP / 2.0  * 2
             left_speed = -right_speed
-        elif abs(angular) < 0.05 :
-            right_speed = left_speed = linear
+        # elif abs(angular) < 0.05 :
+        #     right_speed = left_speed = linear
         else :
             left_speed = linear - angular * self.WHEEL_GAP / 2.0 * 2
             right_speed = linear + angular * self.WHEEL_GAP / 2.0 * 2
