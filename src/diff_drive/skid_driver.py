@@ -24,8 +24,8 @@ def _clip_speed(speed):
 def set_speed(speed: list):
         motor_driver.motor1.throttle = _clip_speed(speed[0])
         motor_driver.motor2.throttle = _clip_speed(speed[1])
-        motor_driver.motor3.throttle = _clip_speed(speed[2])
-        motor_driver.motor4.throttle = _clip_speed(speed[3])
+        motor_driver.motor3.throttle = _clip_speed(speed[3])
+        motor_driver.motor4.throttle = _clip_speed(speed[2])
 
 def stop():
         motor_driver.motor1.throttle = 0
