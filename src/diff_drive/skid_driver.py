@@ -38,15 +38,21 @@ def callback(data):
     linear = data.linear.x
     angular = data.angular.z
 
-    # Calculate left and right wheel velocities for skid steer drive
-    left = linear - angular
-    right = linear + angular
+    # Calculate left and right wheel velocities for differential drive controller
+    left = (linear - angular) / 2.0
+    right = (linear + angular) / 2.0
 
     # Calculate mecanum wheel speeds from left and right wheel velocities
     speeds = [0, 0, 0, 0]
     for i in range(len(speeds)):
         for j in range(len(wheel_coeffs)):
             speeds[i] += wheel_coeffs[j][i] * (left if j < 2 else right) * wheel_coeffs[j][2]
+
+    # Scale speeds to match motor speed range (-1 to 1)
+    max_speed = max(abs(speed) for speed in speeds)
+    if max_speed > 1:
+        for i in range(len(speeds)):
+            speeds[i] /= max_speed
 
     set_speed(speeds)
 
