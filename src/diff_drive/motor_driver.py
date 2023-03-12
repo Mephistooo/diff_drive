@@ -129,13 +129,13 @@ class VelocityCommand():
         # rospy.spin()
         rate = rospy.Rate(self._rate)
         while not rospy.is_shutdown():
-            self.set_speed(self.left_speed, self.right_speed)
-            # delay = rospy.get_time() - self._last_received
-            # if delay < self._timeout:
-                # self.set_speed(self.left_speed, self.right_speed)
-            # else:
-                # self.stop()
-            # rate.sleep()
+            # self.set_speed(self.left_speed, self.right_speed)
+            delay = rospy.get_time() - self._last_received
+            if delay < self._timeout:
+                self.set_speed(self.left_speed, self.right_speed)
+            else:
+                self.stop()
+            rate.sleep()
 
 if __name__ == '__main__':
     velocity_command = VelocityCommand()
